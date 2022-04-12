@@ -1,4 +1,5 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import React, { Fragment, useState } from 'react';
 import {
   StyleSheet,
@@ -7,7 +8,6 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
-  FlatList,
 } from 'react-native';
 
 import { cards, categories, colors } from '../constants';
@@ -35,58 +35,80 @@ const CategoryItem = ({ icon, name }) => (
   </TouchableOpacity>
 );
 
-const FeaturedCard = ({ id, title, description, price, image }) => (
-  <TouchableOpacity style={styles.featuredCard} activeOpacity={0.8}>
-    <Fragment>
-      <View style={styles.featuredCardImageHolder}>
-        <Image
-          style={styles.featuredImage}
-          source={{ uri: image }}
-          resizeMode='cover'
-          width={120}
-          height={120}
-        />
-      </View>
-      <View style={styles.featuredCardInfo}>
-        <Text style={styles.featuredName}>{title}</Text>
-        <Text style={styles.featuredDescription}>{description}</Text>
-        <Text style={styles.featuredPrice}>K{price}</Text>
-        <View>
-          <TouchableOpacity style={styles.addBtn} activeOpacity={0.8}>
-            <MaterialCommunityIcons name='plus' color='white' size={24} />
-          </TouchableOpacity>
+const FeaturedCard = ({ id, name, description, amount, image, market }) => {
+  const navigation = useNavigation();
+  return (
+    <TouchableOpacity
+      style={styles.featuredCard}
+      activeOpacity={0.8}
+      onPress={() =>
+        navigation.navigate('MarketStack', {
+          screen: 'Product',
+          params: {
+            id,
+            market,
+            name,
+            image,
+            description,
+            amount,
+          },
+        })
+      }>
+      <Fragment>
+        <View style={styles.featuredCardImageHolder}>
+          <Image
+            style={styles.featuredImage}
+            source={{ uri: image }}
+            resizeMode='cover'
+            width={120}
+            height={120}
+          />
         </View>
-      </View>
-    </Fragment>
-  </TouchableOpacity>
-);
+        <View style={styles.featuredCardInfo}>
+          <Text style={styles.featuredName}>{name}</Text>
+          <Text style={styles.featuredDescription}>{description}</Text>
+          <Text style={styles.featuredPrice}>K{amount}</Text>
+          <View>
+            <TouchableOpacity style={styles.addBtn} activeOpacity={0.8}>
+              <MaterialCommunityIcons name='plus' color='white' size={24} />
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Fragment>
+    </TouchableOpacity>
+  );
+};
 
 export default function Home() {
   const [featured, setFeatured] = useState([
     {
       id: 1,
-      title: 'Cabbage',
-      description: 'Straight from the garden, fresh as seen',
-      price: '10',
+      name: 'Cabbage',
+      description: 'fresh as seen',
+      amount: 10,
+      market: 'Soweto Market',
       image:
         'https://www.almanac.com/sites/default/files/styles/large/public/image_nodes/cabbage_st-design_gettyimages.jpg?itok=8AzBHNDN',
     },
     {
       id: 2,
-      title: 'Tomatoes',
+      name: 'Tomatoes',
       description: 'Fresh tomatoes from the garden',
-      price: '8',
+      amount: '8',
+      market: 'New Market',
       image:
         'https://extension.umn.edu/sites/extension.umn.edu/files/styles/crop_featured_image_crop/public/Solanum-lycopersicum-Crista-fruit1-%281%29.jpg?h=943b9640&itok=Rev7Bp-K',
     },
     {
       id: 3,
-      title: 'Carrots',
+      name: 'Carrots',
       description: 'Fresh carrots from the garden',
-      price: '5',
+      market: 'Chikumanino Market',
+      amount: '5',
       image: 'https://thumbs.dreamstime.com/b/carots-market-29328226.jpg',
     },
   ]);
+
   return (
     <ScrollView style={styles.container}>
       <View style={{ flex: 1 }}>
@@ -101,17 +123,10 @@ export default function Home() {
             <CategoryItem key={idx} icon={icon} name={name} />
           ))}
         </View>
-        <Text style={styles.sectionTitle}>Categories</Text>
+        <Text style={styles.sectionTitle}>Featured Items</Text>
         <View style={styles.featuredHolder}>
-          {featured.map(({ title, image, description, price, id }, idx) => (
-            <FeaturedCard
-              key={id}
-              image={image}
-              title={title}
-              description={description}
-              price={price}
-              id={id}
-            />
+          {featured.map((props, idx) => (
+            <FeaturedCard key={idx} {...props} />
           ))}
         </View>
       </View>
@@ -133,6 +148,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#eee',
     borderBottomWidth: 4,
     paddingBottom: 20,
+    marginHorizontal: 'auto',
   },
   card: {
     padding: 10,

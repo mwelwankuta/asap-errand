@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   View,
+  Alert,
   ScrollView,
   TouchableOpacity,
   Image,
@@ -12,31 +13,74 @@ import {
 
 import { cards, categories, colors } from '../constants';
 
-const Card = ({ idx, title, icon, color = 'white' }) => (
-  <TouchableOpacity
-    activeOpacity={0.8}
-    style={[
-      styles.card,
-      { backgroundColor: color, marginRight: idx != 1 || idx != 3 ? 10 : 0 },
-    ]}>
-    <Fragment>
-      {icon}
-      <Text style={styles.cardText}>{title}</Text>
-    </Fragment>
-  </TouchableOpacity>
-);
+const Card = ({ idx, title, icon, color = 'white' }) => {
+  const navigation = useNavigation();
+  const navigate = title => {
+    switch (title) {
+      case 'My Budget':
+        navigation.navigate('BudgetProducts');
+        break;
+      case 'Market':
+        navigation.navigate('MarketStack', { screen: 'Market' });
+        break;
+      case 'Monthly Budget':
+        navigation.navigate('CreateBudget');
+        break;
+      default:
+        navigation.navigate('Home');
+        break;
+    }
+  };
 
-const CategoryItem = ({ icon, name }) => (
-  <TouchableOpacity style={styles.categoryItem} activeOpacity={0.8}>
-    <Fragment>
-      <View style={styles.categoryCardIcon}>{icon}</View>
-      <Text style={styles.categoryCardText}>{name}</Text>
-    </Fragment>
-  </TouchableOpacity>
-);
+  return (
+    <TouchableOpacity
+      activeOpacity={0.8}
+      onPress={() => navigate(title)}
+      style={[
+        styles.card,
+        { backgroundColor: color, marginLeft: idx % 1 == 0 ? 10 : 0 },
+      ]}>
+      <Fragment>
+        {icon}
+        <Text style={styles.cardText}>{title}</Text>
+      </Fragment>
+    </TouchableOpacity>
+  );
+};
+
+const CategoryItem = ({ icon, name }) => {
+  const navigation = useNavigation();
+  return (
+    <TouchableOpacity
+      onPress={() => navigation.navigate('Category', { name })}
+      style={styles.categoryItem}
+      activeOpacity={0.8}>
+      <Fragment>
+        <View style={styles.categoryCardIcon}>{icon}</View>
+        <Text style={styles.categoryCardText}>{name}</Text>
+      </Fragment>
+    </TouchableOpacity>
+  );
+};
 
 const FeaturedCard = ({ id, name, description, amount, image, market }) => {
   const navigation = useNavigation();
+  const questionBudget = () => {
+    Alert.alert(
+      'Do you want to add to monthly budget',
+      'you can always remove items later',
+      [
+        {
+          text: 'Monthly',
+          onPress: () => null,
+        },
+        {
+          text: 'Daily',
+          onPress: () => null,
+        },
+      ]
+    );
+  };
   return (
     <TouchableOpacity
       style={styles.featuredCard}
@@ -69,7 +113,10 @@ const FeaturedCard = ({ id, name, description, amount, image, market }) => {
           <Text style={styles.featuredDescription}>{description}</Text>
           <Text style={styles.featuredPrice}>K{amount}</Text>
           <View>
-            <TouchableOpacity style={styles.addBtn} activeOpacity={0.8}>
+            <TouchableOpacity
+              onPress={questionBudget}
+              style={styles.addBtn}
+              activeOpacity={0.8}>
               <MaterialCommunityIcons name='plus' color='white' size={24} />
             </TouchableOpacity>
           </View>
@@ -113,8 +160,14 @@ export default function Home() {
     <ScrollView style={styles.container}>
       <View style={{ flex: 1 }}>
         <View style={styles.cardHolder}>
-          {cards.map(({ title, icon, color }, idx) => (
-            <Card key={idx} idx={idx} icon={icon} title={title} color={color} />
+          {cards.map(({ id, title, icon, color }) => (
+            <Card
+              key={title}
+              idx={id}
+              icon={icon}
+              title={title}
+              color={color}
+            />
           ))}
         </View>
         <Text style={styles.sectionTitle}>Categories</Text>
@@ -125,8 +178,8 @@ export default function Home() {
         </View>
         <Text style={styles.sectionTitle}>Featured Items</Text>
         <View style={styles.featuredHolder}>
-          {featured.map((props, idx) => (
-            <FeaturedCard key={idx} {...props} />
+          {featured.map(props => (
+            <FeaturedCard key={props.id} {...props} />
           ))}
         </View>
       </View>
@@ -154,7 +207,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 4,
     alignItems: 'center',
-    width: '47%',
+    width: '45%',
     marginBottom: 10,
   },
   cardText: {

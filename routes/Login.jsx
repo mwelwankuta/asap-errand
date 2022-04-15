@@ -1,3 +1,4 @@
+import React, { useContext } from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -6,12 +7,14 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
-import React from 'react';
 import { Formik } from 'formik';
+import { StatusBar } from 'expo-status-bar';
+
 import { colors } from '../constants';
-import { login } from '../api';
+import userContext from '../context/user';
 
 export default function Login({ navigation }) {
+  const { setUser } = useContext(userContext);
   const handleValidate = ({ emailphone, password }) => {
     const errors = {};
     if (!emailphone) errors.emailphone = '1';
@@ -20,18 +23,21 @@ export default function Login({ navigation }) {
     return errors;
   };
 
-  const handleSubmit = async ({ emailphone, password }) => {
-    const response = await login({ emailphone, password });
-    console.log(response.json());
+  const handleLogin = async ({ emailphone, password }) => {
+    setUser({ name: 'mwelwa' });
   };
 
   return (
     <ScrollView style={styles.container}>
       <View style={{ flex: 1 }}>
-        <Text style={styles.title}>Log in</Text>
+        <StatusBar />
+        <Text style={styles.title}>Log in to MyBudget App</Text>
+        <Text style={styles.description}>
+          login to all access all the features of the MyBudget app
+        </Text>
         <Formik
           validate={handleValidate}
-          onSubmit={handleSubmit}
+          onSubmit={handleLogin}
           initialValues={{
             emailphone: '',
             password: '',
@@ -40,45 +46,48 @@ export default function Login({ navigation }) {
             <View>
               <View
                 style={
-                  errors.title
+                  errors.emailphone
                     ? [styles.input, { borderBottomColor: 'red' }]
                     : styles.input
                 }>
                 <TextInput
                   placeholder='Email/Phone'
                   keyboardType='email-address'
-                  value={values.title}
-                  style={{ padding: 5 }}
+                  value={values.emailphone}
+                  style={{ padding: 5, backgroundColor: '#eee' }}
                   autoCorrect={false}
-                  autoFocus={true}
                   returnKeyType='next'
                   onChangeText={handleChange('emailphone')}
                 />
               </View>
               <View
                 style={
-                  errors.description
+                  errors.password
                     ? [styles.input, { borderBottomColor: 'red' }]
                     : styles.input
                 }>
                 <TextInput
                   placeholder='Password'
-                  value={values.description}
+                  value={values.password}
                   autoCorrect={false}
                   secureTextEntry={true}
-                  keyboardType={'visible-password'}
-                  style={{ padding: 5 }}
+                  style={{ padding: 5, backgroundColor: '#eee' }}
                   onChangeText={handleChange('password')}
                 />
               </View>
               <View>
-                <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  style={styles.button}
+                  onPress={handleSubmit}>
                   <Text style={styles.buttonText}>Login</Text>
                 </TouchableOpacity>
               </View>
               <TouchableOpacity
                 onPress={() =>
-                  navigation.navigate('AuthStack', { screen: 'CreateAccount' })
+                  navigation.navigate('AuthStack', {
+                    screen: 'CreateAccount',
+                  })
                 }
                 activeOpacity={0.8}>
                 <Text style={styles.createAccountText}>
@@ -96,9 +105,10 @@ export default function Login({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: 'white',
+    flex: 1,
     paddingHorizontal: 20,
+    paddingTop: 50,
   },
   input: {
     borderBottomColor: '#ddd',
@@ -106,24 +116,28 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   button: {
-    backgroundColor: colors.blueColor,
+    backgroundColor: colors.purpleColor,
     paddingHorizontal: 10,
     paddingVertical: 15,
-    borderRadius: 15,
+    borderRadius: 3,
     marginTop: 10,
     alignItems: 'center',
   },
   buttonText: {
     color: 'white',
-    fontWeight: '700',
+    fontWeight: '600',
     fontSize: 16,
   },
   title: {
-    textAlign: 'center',
     fontWeight: '700',
-    fontSize: 18,
+    fontSize: 25,
     color: colors.purpleColor,
     marginTop: 20,
+  },
+  description: {
+    color: '#999',
+    marginTop: 5,
+    marginBottom: 20,
   },
   createAccountText: {
     marginTop: 10,

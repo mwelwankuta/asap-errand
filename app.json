@@ -2,12 +2,13 @@
   "expo": {
     "name": "MyBudget App",
     "slug": "my-budget-app",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
       "resizeMode": "contain",
-      "backgroundColor": "#AF4EE0"
+      "backgroundColor": "#FFF",
+      "icon": "./assets/icon.png"
     },
     "updates": {
       "fallbackToCacheTimeout": 0

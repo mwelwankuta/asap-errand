@@ -1,18 +1,23 @@
+import React, { useState } from 'react';
 import {
   ScrollView,
   StyleSheet,
+  ToastAndroid,
   Text,
   View,
   TouchableOpacity,
   TextInput,
+  ActivityIndicator,
 } from 'react-native';
-import React from 'react';
 import { Formik } from 'formik';
 import { colors } from '../constants';
 import { signup } from '../api';
 import { StatusBar } from 'expo-status-bar';
 
 export default function CreateAccount({ navigation }) {
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
+
   const handleValidate = ({ name, email, phone, password, confirm }) => {
     const errors = {};
 
@@ -28,8 +33,17 @@ export default function CreateAccount({ navigation }) {
   };
 
   const handleSubmit = async values => {
+    setLoading(true);
+    setMessage('');
     const response = await signup({ ...values });
-    console.log(response.json());
+    const data = await response.json();
+
+    if (data.message && data.message == 'User created successfully') {
+      navigation.navigate('AuthStack', 'Login');
+    }
+    setMessage(data.message);
+    ToastAndroid.show(data.message, ToastAndroid.SHORT)
+    setLoading(false);
   };
 
   return (
@@ -37,6 +51,9 @@ export default function CreateAccount({ navigation }) {
       <View style={{ flex: 1 }}>
         <StatusBar backgroundColor='white' />
         <Text style={styles.title}>Create Account</Text>
+        <Text style={styles.description}>
+          fill in all the fields to create an account
+        </Text>
         <Formik
           validate={handleValidate}
           onSubmit={handleSubmit}
@@ -89,7 +106,7 @@ export default function CreateAccount({ navigation }) {
                 }>
                 <TextInput
                   placeholder='Phone'
-                  keyboardType='email-address'
+                  keyboardType='numeric'
                   value={values.phone}
                   style={{ padding: 5, backgroundColor: '#eee' }}
                   autoCorrect={false}
@@ -129,9 +146,16 @@ export default function CreateAccount({ navigation }) {
                   onChangeText={handleChange('confirm')}
                 />
               </View>
+              {message != '' && (
+                <Text style={{ color: colors.purpleColor }}>{message}</Text>
+              )}
               <View>
                 <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-                  <Text style={styles.buttonText}>Sign Up</Text>
+                  {loading ? (
+                    <ActivityIndicator color='white' size='small' />
+                  ) : (
+                    <Text style={styles.buttonText}>Create Account</Text>
+                  )}
                 </TouchableOpacity>
               </View>
               <TouchableOpacity
@@ -187,7 +211,11 @@ const styles = StyleSheet.create({
     fontSize: 25,
     color: colors.purpleColor,
     marginTop: 20,
-    marginBottom: 10,
+  },
+  description: {
+    color: '#999',
+    marginTop: 5,
+    marginBottom: 20,
   },
   loginText: {
     textAlign: 'center',

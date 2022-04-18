@@ -1,4 +1,4 @@
-const url = '';
+const url = 'http://mybudgetapplication.com/App';
 
 async function createBudget(data) {
   return await fetch(url + '/create-budget.php', {
@@ -8,7 +8,7 @@ async function createBudget(data) {
 }
 
 async function getMarkets() {
-  return await fetch(url + '/markets');
+  return await fetch(url + '/markets.php');
 }
 
 async function getProducts(id) {
@@ -18,15 +18,17 @@ async function getProducts(id) {
   });
 }
 
+// login
 async function login({ emailphone, password }) {
-  return await fetch(url + '/login', {
+  return await fetch(url + '/login.php', {
     method: 'POST',
-    body: JSON.stringify({ emailphone, password }),
+    body: JSON.stringify({ email: emailphone, password }),
   });
 }
 
+// create account
 async function signup(data) {
-  return await fetch(url + '/signup', {
+  return await fetch(url + '/create-account.php', {
     method: 'POST',
     body: JSON.stringify(data),
   });

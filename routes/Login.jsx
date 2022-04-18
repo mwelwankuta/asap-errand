@@ -1,20 +1,27 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   ScrollView,
+  ActivityIndicator,
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
   TextInput,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Formik } from 'formik';
 import { StatusBar } from 'expo-status-bar';
 
 import { colors } from '../constants';
 import userContext from '../context/user';
+import { login } from '../api';
 
 export default function Login({ navigation }) {
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
+
   const { setUser } = useContext(userContext);
+
   const handleValidate = ({ emailphone, password }) => {
     const errors = {};
     if (!emailphone) errors.emailphone = '1';
@@ -24,7 +31,16 @@ export default function Login({ navigation }) {
   };
 
   const handleLogin = async ({ emailphone, password }) => {
-    setUser({ name: 'mwelwa' });
+    setLoading(true);
+    const response = await login({ emailphone, password });
+    const user = await response.json();
+
+    if (user.message) setMessage(user.message);
+    else {
+      setLoading(false);
+      await AsyncStorage.setItem('@Budget:user', JSON.stringify(user));
+      setUser(user);
+    }
   };
 
   return (
@@ -75,12 +91,17 @@ export default function Login({ navigation }) {
                   onChangeText={handleChange('password')}
                 />
               </View>
+              <Text style={{ color: 'red' }}>{message}</Text>
               <View>
                 <TouchableOpacity
                   activeOpacity={0.8}
                   style={styles.button}
                   onPress={handleSubmit}>
-                  <Text style={styles.buttonText}>Login</Text>
+                  {loading ? (
+                    <ActivityIndicator color='white' size='small' />
+                  ) : (
+                    <Text style={styles.buttonText}>Login</Text>
+                  )}
                 </TouchableOpacity>
               </View>
               <TouchableOpacity

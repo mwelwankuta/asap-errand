@@ -1,9 +1,6 @@
-export { default as Home } from './Home';
-export { default as Login } from './Login';
-export { default as CreateBudget } from './CreateBudget';
-export { default as Market } from './Market';
-export { default as MarketDetails } from './MarketDetails';
-export { default as Product } from './Product';
-export { default as CreateAccount } from './CreateAccount';
-export { default as Category } from './Category';
-export { default as BudgetProducts } from './BudgetProducts';
+export { default as Map } from './Map';
+export { default as Welcome } from './Welcome';
+export { default as Explore } from './Explore';
+export { default as Messages } from './Messages';
+export { default as Profile } from './Profile';
+export { default as Request } from './Request'

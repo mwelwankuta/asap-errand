@@ -1,178 +1,204 @@
-import React, { useState, useContext, Fragment } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableHighlight,
-  Keyboard,
-  TouchableOpacity,
-} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React, { useContext } from 'react';
+import { TouchableOpacity, Image, StyleSheet, Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import {
-  MaterialCommunityIcons,
-  MaterialIcons,
-  AntDesign,
-} from '@expo/vector-icons';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Explore, Map, Messages, Profile, Request, Welcome } from '../routes';
+import { SvgXml as Svg } from 'react-native-svg';
 
-import {
-  BudgetProducts,
-  Category,
-  CreateAccount,
-  CreateBudget,
-  Home,
-  Login,
-  Market,
-  MarketDetails,
-  Product,
-} from '../routes';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import compass from '../assets/icons/compass.svg';
+import compass_active from '../assets/icons/compass_active.svg';
+import messages from '../assets/icons/messages.svg';
+import messages_active from '../assets/icons/messages_active.svg';
+import plus from '../assets/icons/plus.svg';
+import plus_active from '../assets/icons/plus.svg';
+import profile from '../assets/icons/profile.svg';
+import profile_active from '../assets/icons/profile_active.svg';
+import menu from '../assets/icons/menu.svg';
+import menu_active from '../assets/icons/menu_active.svg';
+import logo from '../assets/asap.svg';
+import arrow_back from '../assets/icons/arrow_back.svg';
+import Add from '../routes/Add';
+import modalContext from '../context/modal';
 
-import { colors } from '../constants';
-import userContext from '../context/user';
+const AuthStack = createNativeStackNavigator();
 
-const Header = () => (
-  <SafeAreaView>
-    <View style={styles.nav}>
-      {/* <TouchableHighlight style={styles.menu}>
-        <MaterialIcons name='menu' color={colors.purpleColor} size={30} />
-      </TouchableHighlight> */}
-      <Text style={styles.title}>MyBudget App</Text>
-    </View>
-  </SafeAreaView>
-);
-
-const TabBar = () => {
-  const [keyboardShowing, setKeyboardShowing] = useState(false);
-  const navigation = useNavigation();
-  Keyboard.addListener('keyboardDidShow', () => {
-    setKeyboardShowing(true);
-  });
-  Keyboard.addListener('keyboardDidHide', () => {
-    setKeyboardShowing(false);
-  });
-
-  if (keyboardShowing) {
-    return <Fragment />;
-  } else
-    return (
-      <View style={styles.tabBar}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('Home')}
-          style={styles.tabItem}
-          activeOpacity={0.8}>
-          <MaterialIcons name='home' color='#999' size={35} />
-          <Text style={styles.tabText}>Home</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('CreateBudget')}
-          style={styles.floatingBtn}
-          activeOpacity={0.8}>
-          <MaterialCommunityIcons name='plus' color='white' size={35} />
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate('MarketStack', { screen: 'Market' })
-          }
-          style={styles.tabItem}
-          activeOpacity={0.8}>
-          <MaterialIcons name='amp-stories' color='#999' size={35} />
-          <Text style={styles.tabText}>Market</Text>
-        </TouchableOpacity>
-      </View>
-    );
-};
-const Stack = createNativeStackNavigator();
-
-const StackNavigation = () => (
-  <Stack.Navigator screenOptions={{ headerShown: false }}>
-    <Stack.Screen name='Home' component={Home} />
-    <Stack.Screen name='Category' component={Category} />
-    <Stack.Screen name='CreateBudget' component={CreateBudget} />
-    <Stack.Screen name='BudgetProducts' component={BudgetProducts} />
-  </Stack.Navigator>
-);
-
-const MStack = createNativeStackNavigator();
-
-const MarketStack = () => (
-  <MStack.Navigator screenOptions={{ headerShown: false }}>
-    <MStack.Screen name='Market' component={Market} />
-    <MStack.Screen name='MarketDetails' component={MarketDetails} />
-    <MStack.Screen name='Product' component={Product} />
-  </MStack.Navigator>
-);
-
-const AStack = createNativeStackNavigator();
-
-const AuthStack = () => (
-  <AStack.Navigator screenOptions={{ headerShown: false }}>
-    <AStack.Screen name='Login' component={Login} />
-    <AStack.Screen name='CreateAccount' component={CreateAccount} />
-  </AStack.Navigator>
-);
-
-const Tabs = createBottomTabNavigator();
-
-export default function MainScreen() {
-  const { user } = useContext(userContext);
+function AuthScreen() {
   return (
-    <Tabs.Navigator
-      tabBar={() => (user ? <TabBar /> : null)}
-      screenOptions={{
-        header: () => <Header />,
-        headerShown: user != null,
-      }}>
-      {!user && <Tabs.Screen name='AuthStack' component={AuthStack} />}
-      <Tabs.Screen name='Main' component={StackNavigation} />
-      <Tabs.Screen name='MarketStack' component={MarketStack} />
-    </Tabs.Navigator>
+    <AuthStack.Navigator screenOptions={{ headerShown: false }}>
+      <AuthStack.Screen name='Welcome' component={Welcome} />
+    </AuthStack.Navigator>
   );
 }
 
+const MainStack = createNativeStackNavigator();
+
+function MainStackScreen() {
+  return (
+    <MainStack.Navigator
+      screenOptions={({ route, navigation }) => ({
+        headerTitleAlign: 'center',
+        headerBackVisible: false,
+        headerShadowVisible: false,
+        headerLeft: () =>
+          route.params && route.params.title ? (
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={() => navigation.goBack()}>
+              <Svg xml={arrow_back} height={16} width={22} />
+            </TouchableOpacity>
+          ) : (
+            <Svg xml={logo} height={52} width={56} />
+          ),
+        headerTitle: () => (
+          <Text style={styles.title}>
+            {route.params ? route.params.title : ''}
+          </Text>
+        ),
+        headerRight: () => (
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Profile')}
+            activeOpacity={0.8}>
+            <Image
+              style={styles.userAvatar}
+              source={{
+                uri: 'https://avatars.githubusercontent.com/u/64831126?v=4',
+              }}
+            />
+          </TouchableOpacity>
+        ),
+      })}>
+      <MainStack.Screen name='Explore' component={Explore} />
+      <MainStack.Screen name='Request' component={Request} />
+      <MainStack.Screen name='Map' component={Map} />
+    </MainStack.Navigator>
+  );
+}
+
+const MainTabs = createBottomTabNavigator();
+
+function MainScreen() {
+  const { setModalVisible } = useContext(modalContext);
+
+  return (
+    <MainTabs.Navigator
+      screenOptions={({ route }) => ({
+        headerTitleAlign: 'center',
+        headerBackVisible: false,
+        headerLeft: () => (
+          <Svg xml={logo} height={52} width={56} style={{ marginLeft: 16 }} />
+        ),
+        headerTitle: () => (
+          <Text style={styles.title}>
+            {route.params ? route.params.title : ''}
+          </Text>
+        ),
+        headerRight: () => (
+          <TouchableOpacity
+            style={{ marginRight: 15.4 }}
+            onPress={() => navigation.navigate('Profile')}
+            activeOpacity={0.8}>
+            <Image
+              style={styles.userAvatar}
+              source={{
+                uri: 'https://avatars.githubusercontent.com/u/64831126?v=4',
+              }}
+            />
+          </TouchableOpacity>
+        ),
+        tabBarHideOnKeyboard: true,
+        tabBarShowLabel: false,
+        tabBarStyle: {
+          borderTopColor: '#ddd',
+          borderTopWidth: 0.6,
+          shadowColor: 'transparent',
+          shadowOpacity: 0,
+        },
+        tabBarIconStyle: {
+          height: 24,
+          width: 24,
+        },
+      })}>
+      <MainTabs.Screen
+        name='Home'
+        component={MainStackScreen}
+        options={() => ({
+          headerShown: false,
+          tabBarIcon: ({ focused, size }) => (
+            <Svg
+              xml={focused ? compass_active : compass}
+              width={size}
+              height={size}
+            />
+          ),
+        })}
+      />
+      <MainTabs.Screen
+        name='Messages'
+        component={Messages}
+        options={{
+          tabBarIcon: ({ focused, size }) => (
+            <Svg
+              xml={focused ? messages_active : messages}
+              width={size}
+              height={size}
+            />
+          ),
+        }}
+      />
+      <MainTabs.Screen
+        name='Add'
+        component={Add}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <Svg xml={focused ? plus_active : plus} width={22} height={22} />
+          ),
+        }}
+      />
+      <MainTabs.Screen
+        name='Profile'
+        component={Profile}
+        options={{
+          tabBarIcon: ({ focused, size }) => (
+            <Svg
+              xml={focused ? profile_active : profile}
+              width={size}
+              height={size}
+            />
+          ),
+        }}
+      />
+      <MainTabs.Screen
+        name='Menu'
+        component={Profile}
+        options={{
+          tabBarIcon: ({ focused, size }) => (
+            <TouchableOpacity onPress={() => setModalVisible(true)}>
+              <Svg
+                xml={focused ? menu_active : menu}
+                width={size}
+                height={size}
+              />
+            </TouchableOpacity>
+          ),
+        }}
+      />
+    </MainTabs.Navigator>
+  );
+}
+
+export { MainScreen, AuthScreen };
 const styles = StyleSheet.create({
-  nav: {
-    padding: 10,
-    borderBottomColor: colors.purpleColor,
-    backgroundColor: 'white',
-    borderBottomWidth: 2,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  userAvatar: {
+    height: 35,
+    width: 35,
+    borderRadius: 100,
+    borderColor: '#ddd',
+    borderWidth: 1,
+    resizeMode: 'cover',
+    marginRight: 10,
   },
   title: {
-    textAlign: 'center',
-    fontSize: 18,
-    fontWeight: '700',
-    color: colors.purpleColor,
-    flex: 1,
-  },
-  menu: {
-    borderRadius: 100,
-  },
-  tabBar: {
-    borderTopColor: 'lightgrey',
-    borderTopWidth: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    height: 60,
-    paddingTop: 7,
-  },
-  tabItem: {
-    alignItems: 'center',
-  },
-  tabText: {
-    color: '#888',
-    fontWeight: '600',
-    fontSize: 12,
-    marginTop: -5,
-  },
-  floatingBtn: {
-    backgroundColor: colors.purpleColor,
-    padding: 10,
-    borderRadius: 100,
-    position: 'absolute',
-    top: -20,
-    left: '42%',
+    fontFamily: 'Inter-SemiBold',
+    fontSize: 15,
   },
 });

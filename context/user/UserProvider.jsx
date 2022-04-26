@@ -6,7 +6,7 @@ export default function UserProvider({ children }) {
   const [user, setUser] = useState(null);
 
   async function getUser() {
-    const storageUser = await AsyncStorage.getItem('@Budget:user');
+    const storageUser = await AsyncStorage.getItem('@Asap:user');
     console.log(storageUser);
     setUser(JSON.parse(storageUser));
   }

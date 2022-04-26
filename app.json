@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "MyBudget App",
-    "slug": "my-budget-app",
-    "version": "1.0.1",
+    "name": "asap",
+    "slug": "asap-errand",
+    "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
       "resizeMode": "contain",
-      "backgroundColor": "#FFF",
-      "icon": "./assets/icon.png"
+      "backgroundColor": "#FFFFFF",
+      "image": "./assets/splash.png"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -24,7 +24,11 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.mybudgetapp.app"
+      "package": "com.asaperrand.app",
+      "permissions":[
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"

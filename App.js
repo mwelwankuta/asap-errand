@@ -22,7 +22,6 @@ export default function App() {
   useEffect(() => {
     NavigationBar.setBackgroundColorAsync('white');
     NavigationBar.setButtonStyleAsync('dark');
-    NavigationBar.setBorderColorAsync('#ddd');
   }, []);
 
   if (!fontsLoaded) {

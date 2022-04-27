@@ -15,7 +15,7 @@ export default function Button(props) {
       paddingHorizontal: 5,
       height: 44,
       justifyContent: 'center',
-      backgroundColor: alternative ? '#ddd' : '#1681FF',
+      backgroundColor: alternative ? '#fcfcfc' : '#1681FF',
       alignItems: 'center',
       borderRadius: 10,
       shadowColor: 'rgba(0,0,0,0.23)',
@@ -25,6 +25,8 @@ export default function Button(props) {
         width: -3,
       },
       flex: 1,
+      borderWidth: 0.5,
+      borderColor: alternative ? '#ddd' : 'transparent',
     },
     buttonText: {
       color: alternative ? '#222' : 'white',
@@ -35,7 +37,7 @@ export default function Button(props) {
   return (
     <TouchableOpacity {...props} activeOpacity={0.8} style={styles.button}>
       {loading ? (
-        <ActivityIndicator color='white' />
+        <ActivityIndicator color={alternative ? '#222' : 'white'} />
       ) : (
         <Text style={styles.buttonText}>{title}</Text>
       )}

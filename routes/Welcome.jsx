@@ -1,25 +1,14 @@
-import React, { useState, useContext } from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import { SvgXml as Svg } from 'react-native-svg';
 import { Button } from '../components';
 
-import userContext from '../context/user';
 //svg import
 import logo from '../assets/asap_errand.svg';
 
-export default function Welcome() {
-  const [loading, setLoading] = useState(false);
-  const { setUser } = useContext(userContext);
-
-  const login = async () => {
-    setLoading(true);
-    setLoading(false);
-    setUser({ name: 'Mwelwa', bio: 'Hello world' });
-  };
-
+export default function Welcome({ navigation }) {
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.topHolder}>
         <View>
           <Svg xml={logo} height='69' width='185' />
@@ -29,14 +18,15 @@ export default function Welcome() {
           ran
         </Text>
       </View>
-      <View style={{ width: '100%', height: 44 }}>
-        <Button
-          loading={loading}
-          onPress={login}
-          title={'Continue with Facebook'}
-        />
+      <View>
+        <View style={[styles.buttonHolder, { marginBottom: 10 }]}>
+          <Button
+            onPress={() => navigation.navigate('Login', { title: '' })}
+            title={'Continue'}
+          />
+        </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -56,5 +46,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginHorizontal: 10,
     fontFamily: 'Inter-Regular',
+  },
+  buttonHolder: {
+    width: '100%',
+    height: 44,
   },
 });

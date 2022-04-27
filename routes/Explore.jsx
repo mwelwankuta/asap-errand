@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react';
 import {
   StyleSheet,
+  ActivityIndicator,
   FlatList,
   View,
   Text,
@@ -9,7 +10,6 @@ import {
 } from 'react-native';
 import * as Location from 'expo-location';
 import { Button, Stars } from '../components';
-
 
 const ErrandRunnerCard = ({ item, navigation }) => {
   const { distance, bio, image, name, rating, recommendations } = item;
@@ -65,6 +65,7 @@ const ErrandRunnerCard = ({ item, navigation }) => {
 };
 
 export default function Explore({ route, navigation }) {
+  const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [data, setData] = useState([
     {
@@ -97,7 +98,10 @@ export default function Explore({ route, navigation }) {
   ]);
 
   const getErrandRunners = () => {
-    setRefreshing(false);
+    setTimeout(() => {
+      setRefreshing(false);
+      setLoading(false);
+    }, 2000);
   };
 
   const getLocation = async () => {
@@ -119,6 +123,14 @@ export default function Explore({ route, navigation }) {
     getErrandRunners();
   });
 
+  if (loading) {
+    return (
+      <View style={styles.loading}>
+        <ActivityIndicator color='#FF0099' size={'large'} />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -131,8 +143,12 @@ export default function Explore({ route, navigation }) {
         endFillColor={'#1681FF'}
         refreshControl={
           <RefreshControl
-            onRefresh={getErrandRunners}
-            titleColor={'#1681FF'}
+            onRefresh={() => {
+              setRefreshing(true);
+              getErrandRunners;
+            }}
+            colors={['#FF0099', '#FF5C00']}
+            title='reload feed'
             refreshing={refreshing}
           />
         }
@@ -142,6 +158,12 @@ export default function Explore({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
+  loading: {
+    backgroundColor: 'white',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   container: {
     backgroundColor: 'white',
     flex: 1,

@@ -1,3 +1,4 @@
+import React, { useContext } from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,12 +7,12 @@ import {
   Image,
   TextInput,
 } from 'react-native';
-import React from 'react';
 import { inputStyle } from '../constants';
 import { Button } from '../components';
+import userContext from '../context/user';
 
 export default function Profile() {
-
+  const { user } = useContext(userContext);
   return (
     <ScrollView style={{ flex: 1, backgroundColor: 'white' }}>
       <View style={styles.container}>
@@ -28,17 +29,24 @@ export default function Profile() {
         </Text>
         <View>
           <Text style={styles.label}>Display Name</Text>
-          <TextInput style={inputStyle} clearTextOnFocus />
-          <Text style={styles.label}> Bio</Text>
-          <View style={styles.update}>
-            <TextInput
-              multiline
-              numberOfLines={3}
-              textAlignVertical='top'
-              style={inputStyle}
-              clearTextOnFocus
-            />
-          </View>
+          <TextInput
+            style={[inputStyle, { marginBottom: 10 }]}
+            clearTextOnFocus
+          />
+          {user.type == 'runner' && (
+            <>
+              <Text style={styles.label}> Bio</Text>
+              <View style={styles.update}>
+                <TextInput
+                  multiline
+                  numberOfLines={3}
+                  textAlignVertical='top'
+                  style={inputStyle}
+                  clearTextOnFocus
+                />
+              </View>
+            </>
+          )}
           <Button title='Update' alternative />
         </View>
       </View>
@@ -69,7 +77,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 13,
-    marginVertical: 4,
+    marginBottom: 4,
     fontFamily: 'Inter-Regular',
   },
   update: {

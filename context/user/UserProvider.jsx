@@ -1,5 +1,5 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import userContext from './index';
 
 export default function UserProvider({ children }) {
@@ -7,13 +7,10 @@ export default function UserProvider({ children }) {
 
   async function getUser() {
     const storageUser = await AsyncStorage.getItem('@Asap:user');
-    console.log(storageUser);
-    setUser(JSON.parse(storageUser));
+    if (storageUser != null) setUser(JSON.parse(storageUser));
   }
 
-  useEffect(() => {
-    getUser();
-  }, []);
+  useEffect(() => getUser(), []);
 
   return (
     <userContext.Provider value={{ user, setUser }}>

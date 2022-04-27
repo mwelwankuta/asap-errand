@@ -44,7 +44,7 @@ export default function Request({ navigation, route }) {
             <TouchableOpacity
               activeOpacity={0.8}
               autoComplete='off'
-              style={[inputStyle, { height: 38 }]}>
+              style={[inputStyle, { height: 50 }]}>
               <View style={styles.inputContent}>
                 <Text>{pickup ? pickup : ''}</Text>
                 <TouchableOpacity
@@ -67,7 +67,7 @@ export default function Request({ navigation, route }) {
             <TouchableOpacity
               activeOpacity={0.8}
               autoComplete='off'
-              style={[inputStyle, { height: 38 }]}>
+              style={[inputStyle, { height: 50 }]}>
               <View style={styles.inputContent}>
                 <Text>{destination ? destination : ''}</Text>
                 <TouchableOpacity

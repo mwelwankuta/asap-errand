@@ -5,7 +5,7 @@ const colors = {
 };
 
 const inputStyle = {
-  paddingVertical: 5,
+  paddingVertical: 12,
   paddingHorizontal: 10,
   backgroundColor: '#fcfcfc',
   borderWidth: 0.5,

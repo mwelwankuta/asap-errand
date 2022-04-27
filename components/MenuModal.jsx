@@ -13,28 +13,38 @@ export default function MenuModal() {
       backButtonClose
       backdropPressToClose
       swipeThreshold={0}
+      style={styles.container}
+      backdropOpacity={0.2}
       position='bottom'
       isOpen={modalVisible}
       onClosed={() => setModalVisible(false)}>
       <SafeAreaView>
-        <View style={styles.container}>
-          <TouchableOpacity>
-            <AntDesign name='down' size={24} color='#888' />
-          </TouchableOpacity>
-          <Text style={styles.title}>Menu</Text>
-        </View>
+        <View
+          style={{
+            height: 5,
+            width: 100,
+            borderRadius: 100,
+            backgroundColor: '#ddd',
+            padding: 2,
+            alignSelf: 'center',
+            marginTop: 6,
+          }}></View>
+        <Text style={styles.title}>Menu</Text>
       </SafeAreaView>
     </ReactModal>
   );
 }
 
 const styles = StyleSheet.create({
-  title: {
-    fontFamily: 'Inter-SemiBold',
-    fontSize: 16,
-  },
   container: {
     paddingVertical: 10,
     paddingHorizontal: 20,
+    marginTop: 200,
+    borderTopRightRadius: 10,
+    borderTopLeftRadius: 10,
+  },
+  title: {
+    fontFamily: 'Inter-SemiBold',
+    fontSize: 16,
   },
 });

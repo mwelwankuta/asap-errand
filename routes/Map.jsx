@@ -6,7 +6,6 @@ import {
   StatusBar,
   TouchableOpacity,
 } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { SvgXml as Svg } from 'react-native-svg';
 import * as Location from 'expo-location';
 import MapView from 'react-native-maps';
@@ -14,6 +13,7 @@ import MapView from 'react-native-maps';
 import { Button } from '../components';
 
 import location_picker from '../assets/location_picker.svg';
+import current_location from '../assets/icons/current_location.svg';
 
 export default React.memo(function Map({ navigation, route }) {
   const [region, setRegion] = useState({
@@ -76,7 +76,7 @@ export default React.memo(function Map({ navigation, route }) {
           onPress={getLocation}
           activeOpacity={0.8}
           style={styles.picker}>
-          <MaterialCommunityIcons name='map-marker' size={25} />
+          <Svg xml={current_location} width={24} height={24} />
         </TouchableOpacity>
       </View>
     </View>
@@ -148,8 +148,8 @@ const styles = StyleSheet.create({
   },
   marker: {
     position: 'absolute',
-    top: '41%',
-    left: Dimensions.get('window').width / 2.23,
+    top: '48%',
+    left: Dimensions.get('window').width / 2.12,
   },
   bottomButton: {
     position: 'absolute',

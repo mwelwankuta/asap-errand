@@ -2,37 +2,30 @@ import React, { useContext } from 'react';
 import { TouchableOpacity, Image, StyleSheet, Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Explore, Map, Messages, Profile, Request, Welcome } from '../routes';
+import { ErrandHistory, Explore, Map, Messages, Profile, Request } from '../routes';
 import { SvgXml as Svg } from 'react-native-svg';
+
+import AuthScreen from './AuthScreen';
 
 import compass from '../assets/icons/compass.svg';
 import compass_active from '../assets/icons/compass_active.svg';
 import messages from '../assets/icons/messages.svg';
 import messages_active from '../assets/icons/messages_active.svg';
-import plus from '../assets/icons/plus.svg';
-import plus_active from '../assets/icons/plus.svg';
 import profile from '../assets/icons/profile.svg';
 import profile_active from '../assets/icons/profile_active.svg';
 import menu from '../assets/icons/menu.svg';
 import menu_active from '../assets/icons/menu_active.svg';
 import logo from '../assets/asap.svg';
 import arrow_back from '../assets/icons/arrow_back.svg';
-import Add from '../routes/Add';
 import modalContext from '../context/modal';
-
-const AuthStack = createNativeStackNavigator();
-
-function AuthScreen() {
-  return (
-    <AuthStack.Navigator screenOptions={{ headerShown: false }}>
-      <AuthStack.Screen name='Welcome' component={Welcome} />
-    </AuthStack.Navigator>
-  );
-}
+import userContext from '../context/user';
 
 const MainStack = createNativeStackNavigator();
 
 function MainStackScreen() {
+  const { setModalVisible } = useContext(modalContext);
+  const { user } = useContext(userContext);
+
   return (
     <MainStack.Navigator
       screenOptions={({ route, navigation }) => ({
@@ -56,12 +49,12 @@ function MainStackScreen() {
         ),
         headerRight: () => (
           <TouchableOpacity
-            onPress={() => navigation.navigate('Profile')}
+            onPress={() => setModalVisible(true)}
             activeOpacity={0.8}>
             <Image
               style={styles.userAvatar}
               source={{
-                uri: 'https://avatars.githubusercontent.com/u/64831126?v=4',
+                uri: user && user.image,
               }}
             />
           </TouchableOpacity>
@@ -76,8 +69,9 @@ function MainStackScreen() {
 
 const MainTabs = createBottomTabNavigator();
 
-function MainScreen() {
+export default function MainScreen() {
   const { setModalVisible } = useContext(modalContext);
+  const { user } = useContext(userContext);
 
   return (
     <MainTabs.Navigator
@@ -94,13 +88,15 @@ function MainScreen() {
         ),
         headerRight: () => (
           <TouchableOpacity
+            onPress={() => setModalVisible(true)}
             style={{ marginRight: 15.4 }}
-            onPress={() => navigation.navigate('Profile')}
             activeOpacity={0.8}>
             <Image
               style={styles.userAvatar}
               source={{
-                uri: 'https://avatars.githubusercontent.com/u/64831126?v=4',
+                uri: user.image,
+                width: 35,
+                height: 35,
               }}
             />
           </TouchableOpacity>
@@ -114,8 +110,8 @@ function MainScreen() {
           shadowOpacity: 0,
         },
         tabBarIconStyle: {
-          height: 24,
-          width: 24,
+          height: 20,
+          width: 20,
         },
       })}>
       <MainTabs.Screen
@@ -146,15 +142,6 @@ function MainScreen() {
         }}
       />
       <MainTabs.Screen
-        name='Add'
-        component={Add}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <Svg xml={focused ? plus_active : plus} width={22} height={22} />
-          ),
-        }}
-      />
-      <MainTabs.Screen
         name='Profile'
         component={Profile}
         options={{
@@ -169,16 +156,14 @@ function MainScreen() {
       />
       <MainTabs.Screen
         name='Menu'
-        component={Profile}
+        component={ErrandHistory}
         options={{
           tabBarIcon: ({ focused, size }) => (
-            <TouchableOpacity onPress={() => setModalVisible(true)}>
-              <Svg
-                xml={focused ? menu_active : menu}
-                width={size}
-                height={size}
-              />
-            </TouchableOpacity>
+            <Svg
+              xml={focused ? menu_active : menu}
+              width={size}
+              height={size}
+            />
           ),
         }}
       />
@@ -186,7 +171,6 @@ function MainScreen() {
   );
 }
 
-export { MainScreen, AuthScreen };
 const styles = StyleSheet.create({
   userAvatar: {
     height: 35,

@@ -1,0 +1,12 @@
+[
+    {
+        "name": "Zambia",
+        "dial_code": "+260",
+        "code": "ZM"
+    },
+    {
+        "name": "Nigeria",
+        "dial_code": "+234",
+        "code": "NG"
+    }
+]

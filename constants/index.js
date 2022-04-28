@@ -13,4 +13,6 @@ const inputStyle = {
   borderRadius: 9,
 };
 
-export { colors, inputStyle };
+const developerEmail = "mwelwankuta@gmail.com"
+
+export { colors, inputStyle, developerEmail };

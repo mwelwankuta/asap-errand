@@ -2,7 +2,7 @@
   "expo": {
     "name": "asap",
     "slug": "asap-errand",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -17,7 +17,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.asaperrand.app",
+      "config": {
+        "googleMapsApiKey": "AIzaSyBPvx8R7sGLl6E3B7mO4alqS0oLAFmCVpg"
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -25,10 +29,15 @@
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.asaperrand.app",
-      "permissions":[
+      "permissions": [
         "ACCESS_COARSE_LOCATION",
         "ACCESS_FINE_LOCATION"
-      ]
+      ],
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyBPvx8R7sGLl6E3B7mO4alqS0oLAFmCVpg"
+        }
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"

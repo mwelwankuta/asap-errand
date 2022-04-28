@@ -40,7 +40,9 @@ export default function Messages() {
       <Svg xml={empty_illustration} width={'50%'} height={'25%'} />
       <Text style={styles.noMessageLabel}>No Messages</Text>
       <Text style={styles.noMessageDescription}>
-        you have no errand request in progress
+        {user.account == 'runner'
+          ? 'You have no on-going errand'
+          : 'you have no errand request in progress'}
       </Text>
     </View>
   );

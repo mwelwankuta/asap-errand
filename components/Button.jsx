@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 
 export default function Button(props) {
-  const { loading, title, alternative } = props;
+  const { loading, title, alternative, height } = props;
 
   const styles = StyleSheet.create({
     button: {

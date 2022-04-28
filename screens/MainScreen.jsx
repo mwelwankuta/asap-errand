@@ -2,7 +2,16 @@ import React, { useContext } from 'react';
 import { TouchableOpacity, Image, StyleSheet, Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { ErrandHistory, Explore, Map, Messages, Profile, Request } from '../routes';
+import {
+  ErrandHistory,
+  Explore,
+  Map,
+  Messages,
+  Profile,
+  Request,
+  Runner,
+  SearchLocation,
+} from '../routes';
 import { SvgXml as Svg } from 'react-native-svg';
 
 import AuthScreen from './AuthScreen';
@@ -62,7 +71,9 @@ function MainStackScreen() {
       })}>
       <MainStack.Screen name='Explore' component={Explore} />
       <MainStack.Screen name='Request' component={Request} />
+      <MainStack.Screen name='SearchLocation' component={SearchLocation} />
       <MainStack.Screen name='Map' component={Map} />
+      <MainStack.Screen name='Runner' component={Runner} />
     </MainStack.Navigator>
   );
 }

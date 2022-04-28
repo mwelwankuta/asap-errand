@@ -1,9 +1,9 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { TouchableWithoutFeedback } from 'react-native';
-import { Authenticate, VerifyCode, Welcome } from '../routes';
+import { Authenticate, VerifyCode, Welcome, LoginDetails } from '../routes';
 import { SvgXml as Svg } from 'react-native-svg';
 
-import arrow_back from '../assets/icons/arrow_back.svg'
+import arrow_back from '../assets/icons/arrow_back.svg';
 
 const AuthStack = createNativeStackNavigator();
 
@@ -26,6 +26,7 @@ export default function AuthScreen() {
       <AuthStack.Screen name='Welcome' component={Welcome} />
       <AuthStack.Screen name='Login' component={Authenticate} />
       <AuthStack.Screen name='VerifyCode' component={VerifyCode} />
+      <AuthStack.Screen name='LoginDetails' component={LoginDetails} />
     </AuthStack.Navigator>
   );
 }

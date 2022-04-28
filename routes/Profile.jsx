@@ -27,13 +27,16 @@ export default function Profile() {
         <Text style={styles.pictureInt}>
           synced with facebook profile picture
         </Text>
+        <View style={{ marginVertical: 10 }}>
+          <Button title='Connect Facebook' />
+        </View>
         <View>
           <Text style={styles.label}>Display Name</Text>
           <TextInput
             style={[inputStyle, { marginBottom: 10 }]}
             clearTextOnFocus
           />
-          {user.type == 'runner' && (
+          {user.account == 'runner' && (
             <>
               <Text style={styles.label}> Bio</Text>
               <View style={styles.update}>

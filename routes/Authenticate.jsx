@@ -41,7 +41,7 @@ export default function Authenticate({ navigation }) {
             initialValues={{ code: selectedCountry.dial_code, phone: '' }}>
             {({ values, errors, handleChange, handleBlur, handleSubmit }) => (
               <View>
-                <Text style={styles.title}>Create an account</Text>
+                <Text style={styles.title}>Enter your phone number</Text>
                 <Text style={styles.description}>
                   enter your phone number and region to register for an account
                 </Text>

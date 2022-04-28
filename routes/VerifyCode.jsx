@@ -15,23 +15,12 @@ import { Button } from '../components';
 
 import userContext from '../context/user';
 
-export default function VerifyCode({ route }) {
+export default function VerifyCode({ route, navigation }) {
   const { phone, code } = route.params;
   const { setUser } = useContext(userContext);
 
   function handleSubmit() {
-    setUser({
-      id: 123,
-      name: 'Mwelwa Nkuta',
-      image: 'https://avatars.githubusercontent.com/u/64831126?v=4',
-      errand_in_progress: false,
-      account: 'standard',
-      errand: {
-        name: 'Lee Robinson',
-        image: 'https://avatars.githubusercontent.com/u/9113740?v=4',
-        chat: '092',
-      },
-    });
+    navigation.navigate('LoginDetails');
   }
 
   function handleValidation({ code }) {

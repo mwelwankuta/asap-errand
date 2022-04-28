@@ -13,13 +13,17 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { Button, Stars } from '../components';
 
 import { inputStyle } from '../constants';
+import { useNavigation } from '@react-navigation/native';
 
-export default function Request({ navigation, route }) {
+export default function Request({ route }) {
+  const navigation = useNavigation();
   const { image, rating, recommendations, bio, name, pickup, destination } =
     route.params;
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      automaticallyAdjustKeyboardInsets={true}>
       <View style={{ paddingBottom: 20 }}>
         <View style={styles.userInfoHolder}>
           <View>
@@ -43,10 +47,16 @@ export default function Request({ navigation, route }) {
             <Text style={styles.inputLabel}>Pick-up location</Text>
             <TouchableOpacity
               activeOpacity={0.8}
-              autoComplete='off'
+              onPress={() =>
+                navigation.navigate('SearchLocation', {
+                  ...route.params,
+                  title: 'Pick-up point',
+                  title_key: 'pickup',
+                })
+              }
               style={[inputStyle, { height: 50 }]}>
               <View style={styles.inputContent}>
-                <Text>{pickup ? pickup : ''}</Text>
+                <Text style={styles.coordinates}>{pickup ? pickup : ''}</Text>
                 <TouchableOpacity
                   style={styles.mapButton}
                   activeOpacity={0.8}
@@ -66,10 +76,18 @@ export default function Request({ navigation, route }) {
             <Text style={styles.inputLabel}>Destination</Text>
             <TouchableOpacity
               activeOpacity={0.8}
-              autoComplete='off'
+              onPress={() =>
+                navigation.navigate('SearchLocation', {
+                  ...route.params,
+                  title: 'Destination',
+                  title_key: 'destination',
+                })
+              }
               style={[inputStyle, { height: 50 }]}>
               <View style={styles.inputContent}>
-                <Text>{destination ? destination : ''}</Text>
+                <Text style={styles.coordinates}>
+                  {destination ? destination : ''}
+                </Text>
                 <TouchableOpacity
                   style={styles.mapButton}
                   activeOpacity={0.8}
@@ -173,10 +191,17 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     borderWidth: 1,
     borderColor: '#ddd',
+    position: 'absolute',
+    right: 0,
+    backgroundColor: '#fcfcfc',
   },
   inputContent: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  coordinates: {
+    fontFamily: 'Inter-Regular',
+    fontSize: 13,
   },
 });

@@ -1,14 +1,8 @@
-import React, { useLayoutEffect, useEffect, useState } from 'react';
-import {
-  StyleSheet,
-  View,
-  Dimensions,
-  StatusBar,
-  TouchableOpacity,
-} from 'react-native';
+import React, { useLayoutEffect, useState } from 'react';
+import { StyleSheet, View, Dimensions, TouchableOpacity } from 'react-native';
 import { SvgXml as Svg } from 'react-native-svg';
 import * as Location from 'expo-location';
-import MapView from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 
 import { Button } from '../components';
 
@@ -54,9 +48,9 @@ export default React.memo(function Map({ navigation, route }) {
 
   return (
     <View style={{ flex: 1, position: 'relative' }}>
-      <StatusBar backgroundColor={'transparent'} />
       <MapView
         clustering={true}
+        provider={PROVIDER_GOOGLE}
         showsUserLocation
         mapType='standard'
         style={{ flex: 1, width: '100%', height: '100%' }}

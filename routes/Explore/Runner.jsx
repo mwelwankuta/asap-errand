@@ -29,7 +29,7 @@ export default function Runner({ data }) {
         showsHorizontalScrollIndicator={false}
         decelerationRate='normal'
         renderItem={({ item }) => (
-          <RequestRunnerCard item={item} navigation={navigation} />
+          <RequestRunnerCard {...item} navigation={navigation} />
         )}
         refreshControl={
           <RefreshControl

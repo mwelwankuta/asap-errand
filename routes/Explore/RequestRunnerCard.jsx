@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
 import { TouchableOpacity, View, Text, Image, StyleSheet } from 'react-native';
-import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
-import { Button, Stars } from '../../components';
+import MapView, { Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
+import { Button } from '../../components';
 
-export default function RequestRunnerCard({ item, navigation }) {
-  const { distance, bio, image, name, coordinates } = item;
+export default function RequestRunnerCard({
+  distance,
+  bio,
+  image,
+  name,
+  coordinates,
+  navigation,
+}) {
   const [region, setRegion] = useState({
     latitude: -15.077428,
     longitude: 28.017744,

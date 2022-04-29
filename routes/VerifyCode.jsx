@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from 'react';
+import React from 'react';
 import { Formik } from 'formik';
 import {
   StyleSheet,
@@ -8,79 +8,65 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-
-import { inputStyle } from '../constants';
 import { Button } from '../components';
-
-import userContext from '../context/user';
+import { inputStyle } from '../constants';
 
 export default function VerifyCode({ route, navigation }) {
   const { phone, code } = route.params;
-  const { setUser } = useContext(userContext);
-
-  function handleSubmit() {
-    navigation.navigate('LoginDetails');
-  }
-
-  function handleValidation({ code }) {
-    const errors = {};
-    if (!code) errors.code = 'a code is needed to continue';
-    return errors;
-  }
-
   return (
-    <Fragment>
-      <ScrollView style={styles.container}>
-        <SafeAreaView>
-          <Formik
-            validate={handleValidation}
-            onSubmit={handleSubmit}
-            initialValues={{ code: '' }}>
-            {({
-              values,
-              errors,
-              touched,
-              handleChange,
-              handleBlur,
-              handleSubmit,
-            }) => (
-              <View>
-                <Text style={styles.title}>Verify Code</Text>
-                <Text style={styles.description}>
-                  a code has been sent to {code} {phone} enter it to continue
-                </Text>
-                <View style={styles.inputHolder}>
-                  <TextInput
-                    keyboardType='phone-pad'
-                    textContentType='oneTimeCode'
-                    autoComplete='sms-otp'
-                    maxLength={4}
-                    placeholder='Code'
-                    style={
-                      errors.code
-                        ? [inputStyle, { borderColor: 'red' }]
-                        : inputStyle
-                    }
-                    onChangeText={handleChange('code')}
-                    onBlur={handleBlur('code')}
-                    value={values.code}
-                  />
-                  <Text style={styles.errorText}>
-                    {touched.code ? errors.code : ''}
-                  </Text>
-                  <TouchableOpacity style={styles.resend}>
-                    <Text>Didn't receive a code? </Text>
-                    <Text style={styles.resendText}>Resend Code</Text>
-                  </TouchableOpacity>
-                </View>
-                <Button title='Verify Code' onPress={handleSubmit} />
-              </View>
-            )}
-          </Formik>
-        </SafeAreaView>
-      </ScrollView>
-    </Fragment>
+    <ScrollView style={styles.container}>
+      <Formik
+        validate={({ code }) => {
+          const errors = {};
+          if (!code) errors.code = 'a code is needed to continue';
+          return errors;
+        }}
+        onSubmit={() => {
+          navigation.navigate('LoginDetails');
+        }}
+        initialValues={{ code: '' }}>
+        {({
+          values,
+          errors,
+          touched,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+        }) => (
+          <View>
+            <Text style={styles.title}>Verify Code</Text>
+            <Text style={styles.description}>
+              a code has been sent to {code} {phone} enter it to continue
+            </Text>
+            <View style={styles.inputHolder}>
+              <TextInput
+                keyboardType='phone-pad'
+                textContentType='oneTimeCode'
+                autoComplete='sms-otp'
+                maxLength={4}
+                placeholder='Code'
+                style={
+                  errors.code
+                    ? [inputStyle, { borderColor: 'red' }]
+                    : inputStyle
+                }
+                onChangeText={handleChange('code')}
+                onBlur={handleBlur('code')}
+                value={values.code}
+              />
+              <Text style={styles.errorText}>
+                {touched.code ? errors.code : ''}
+              </Text>
+              <TouchableOpacity style={styles.resend}>
+                <Text>Didn't receive a code? </Text>
+                <Text style={styles.resendText}>Resend Code</Text>
+              </TouchableOpacity>
+            </View>
+            <Button title='Verify Code' onPress={handleSubmit} />
+          </View>
+        )}
+      </Formik>
+    </ScrollView>
   );
 }
 

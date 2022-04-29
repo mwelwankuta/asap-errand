@@ -1,21 +1,13 @@
-import React, { useContext } from 'react';
+import React, { useContext, Fragment } from 'react';
 import { TouchableOpacity, Image, StyleSheet, Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import {
-  ErrandHistory,
-  Explore,
-  Map,
-  Messages,
-  Profile,
-  Request,
-  Runner,
-  SearchLocation,
-} from '../routes';
+import { ErrandHistory, Messages, Profile } from '../routes';
 import { SvgXml as Svg } from 'react-native-svg';
 
-import AuthScreen from './AuthScreen';
+import MenuModal from '../components/MenuModal';
+import HomeScreen from './HomeScreen';
 
+// asset imports
 import compass from '../assets/icons/compass.svg';
 import compass_active from '../assets/icons/compass_active.svg';
 import messages from '../assets/icons/messages.svg';
@@ -25,67 +17,17 @@ import profile_active from '../assets/icons/profile_active.svg';
 import menu from '../assets/icons/menu.svg';
 import menu_active from '../assets/icons/menu_active.svg';
 import logo from '../assets/asap.svg';
-import arrow_back from '../assets/icons/arrow_back.svg';
 import modalContext from '../context/modal';
 import userContext from '../context/user';
 
-const MainStack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
-function MainStackScreen() {
+export default function RootNavigation() {
   const { setModalVisible } = useContext(modalContext);
   const { user } = useContext(userContext);
 
   return (
-    <MainStack.Navigator
-      screenOptions={({ route, navigation }) => ({
-        headerTitleAlign: 'center',
-        headerBackVisible: false,
-        headerShadowVisible: false,
-        headerLeft: () =>
-          route.params && route.params.title ? (
-            <TouchableOpacity
-              activeOpacity={0.8}
-              onPress={() => navigation.goBack()}>
-              <Svg xml={arrow_back} height={16} width={22} />
-            </TouchableOpacity>
-          ) : (
-            <Svg xml={logo} height={52} width={56} />
-          ),
-        headerTitle: () => (
-          <Text style={styles.title}>
-            {route.params ? route.params.title : ''}
-          </Text>
-        ),
-        headerRight: () => (
-          <TouchableOpacity
-            onPress={() => setModalVisible(true)}
-            activeOpacity={0.8}>
-            <Image
-              style={styles.userAvatar}
-              source={{
-                uri: user && user.image,
-              }}
-            />
-          </TouchableOpacity>
-        ),
-      })}>
-      <MainStack.Screen name='Explore' component={Explore} />
-      <MainStack.Screen name='Request' component={Request} />
-      <MainStack.Screen name='SearchLocation' component={SearchLocation} />
-      <MainStack.Screen name='Map' component={Map} />
-      <MainStack.Screen name='Runner' component={Runner} />
-    </MainStack.Navigator>
-  );
-}
-
-const MainTabs = createBottomTabNavigator();
-
-export default function MainScreen() {
-  const { setModalVisible } = useContext(modalContext);
-  const { user } = useContext(userContext);
-
-  return (
-    <MainTabs.Navigator
+    <Tab.Navigator
       screenOptions={({ route }) => ({
         headerTitleAlign: 'center',
         headerBackVisible: false,
@@ -125,9 +67,9 @@ export default function MainScreen() {
           width: 20,
         },
       })}>
-      <MainTabs.Screen
+      <Tab.Screen
         name='Home'
-        component={MainStackScreen}
+        component={HomeScreen}
         options={() => ({
           headerShown: false,
           tabBarIcon: ({ focused, size }) => (
@@ -139,7 +81,7 @@ export default function MainScreen() {
           ),
         })}
       />
-      <MainTabs.Screen
+      <Tab.Screen
         name='Messages'
         component={Messages}
         options={{
@@ -152,7 +94,7 @@ export default function MainScreen() {
           ),
         }}
       />
-      <MainTabs.Screen
+      <Tab.Screen
         name='Profile'
         component={Profile}
         options={{
@@ -165,7 +107,7 @@ export default function MainScreen() {
           ),
         }}
       />
-      <MainTabs.Screen
+      <Tab.Screen
         name='Menu'
         component={ErrandHistory}
         options={{
@@ -178,7 +120,7 @@ export default function MainScreen() {
           ),
         }}
       />
-    </MainTabs.Navigator>
+    </Tab.Navigator>
   );
 }
 

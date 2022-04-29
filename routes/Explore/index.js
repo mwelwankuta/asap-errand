@@ -85,7 +85,7 @@ export default function Explore({ navigation }) {
     );
   }
 
-  if (user.account == 'runner') {
+  if (user.account && user.account.type == 'runner') {
     return <Runner data={data} />;
   }
 
@@ -95,7 +95,7 @@ export default function Explore({ navigation }) {
         style={styles.list}
         data={data}
         renderItem={({ item }) => (
-          <ErrandRunnerCard item={item} navigation={navigation} />
+          <ErrandRunnerCard {...item} navigation={navigation} />
         )}
         keyExtractor={item => item.id}
         endFillColor={'#1681FF'}

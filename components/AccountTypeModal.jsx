@@ -13,8 +13,8 @@ export default function AccountTypeModal({
   closeModal,
   setSelectedAccount,
 }) {
-  const selectedAccount = type => {
-    setSelectedAccount(type);
+  const selectedAccount = account => {
+    setSelectedAccount(account);
     closeModal();
   };
 
@@ -39,11 +39,14 @@ export default function AccountTypeModal({
         }}></View>
       <Text style={styles.title}>Select Account Type</Text>
       <FlatList
-        data={[{ name: 'Standard' }, { name: 'Errand Runner' }]}
+        data={[
+          { name: 'Standard', type: 'standard' },
+          { name: 'Errand Runner', type: 'runner' },
+        ]}
         keyExtractor={item => item.name}
         renderItem={({ item }) => (
           <TouchableOpacity
-            onPress={() => selectedAccount(item.name)}
+            onPress={() => selectedAccount(item)}
             activeOpacity={0.8}
             style={styles.listItem}>
             <Text style={{ fontFamily: 'Inter-Regular' }}>{item.name}</Text>
@@ -59,7 +62,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     marginTop: 10,
-    height:'60%'
+    height: '60%',
   },
   listItem: {
     borderBottomColor: '#ddd',

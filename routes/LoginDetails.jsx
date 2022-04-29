@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import { Formik } from 'formik';
 import { AntDesign } from '@expo/vector-icons';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { AccountTypeModal, Button } from '../components';
 
@@ -18,39 +17,39 @@ import userContext from '../context/user';
 
 export default function LoginDetails() {
   const [showModal, setShowModal] = useState(false);
-  const [selectedAccount, setSelectedAccount] = useState('Standard');
+  const [selectedAccount, setSelectedAccount] = useState({
+    name: 'Standard',
+    account: 'standard',
+  });
 
   const { setUser } = useContext(userContext);
-
-  function handleValidation({ name }) {
-    const errors = {};
-    if (!name) errors.name = 'a name is required';
-    return errors;
-  }
-
-  function handleSubmit() {
-    setUser({
-      id: 123,
-      name: 'Mwelwa Nkuta',
-      image: 'https://avatars.githubusercontent.com/u/64831126?v=4',
-      errand_in_progress: false,
-      account: selectedAccount,
-      errand: {
-        name: 'Lee Robinson',
-        image: 'https://avatars.githubusercontent.com/u/9113740?v=4',
-        chat: '092',
-      },
-    });
-  }
-
   return (
     <Fragment>
-      <ScrollView style={styles.container} automaticallyAdjustKeyboardInsets>
-        <SafeAreaView style={{ flex: 1 }}>
+      <ScrollView style={styles.container}>
+        <View style={styles.contentHolder}>
           <Formik
-            onSubmit={handleSubmit}
-            validate={handleValidation}
-            initialValues={{ name: '', account: selectedAccount }}>
+            validateOnBlur={false}
+            validateOnChange={false}
+            initialValues={{ name: '', account: selectedAccount }}
+            onSubmit={() => {
+              setUser({
+                id: 123,
+                name: 'Mwelwa Nkuta',
+                image: 'https://avatars.githubusercontent.com/u/64831126?v=4',
+                errand_in_progress: false,
+                account: selectedAccount,
+                errand: {
+                  name: 'Lee Robinson',
+                  image: 'https://avatars.githubusercontent.com/u/9113740?v=4',
+                  chat: '092',
+                },
+              });
+            }}
+            validate={({ name }) => {
+              const errors = {};
+              if (!name) errors.name = 'a name is required';
+              return errors;
+            }}>
             {({ values, errors, handleChange, handleBlur, handleSubmit }) => (
               <View>
                 <Text style={styles.title}>About you</Text>
@@ -83,7 +82,7 @@ export default function LoginDetails() {
                     placeholder='Account Type'
                     style={[inputStyle, styles.country]}>
                     <Text style={{ fontFamily: 'Inter-Regular' }}>
-                      {selectedAccount}
+                      {selectedAccount.name}
                     </Text>
                     <AntDesign name='caretdown' size={10} color='#555' />
                   </TouchableOpacity>
@@ -97,7 +96,7 @@ export default function LoginDetails() {
               </View>
             )}
           </Formik>
-        </SafeAreaView>
+        </View>
       </ScrollView>
 
       <AccountTypeModal
@@ -113,9 +112,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-    paddingHorizontal: 20,
-    paddingBottom: 10,
-    paddingTop: 20,
+  },
+  contentHolder: {
+    flex: 1,
+    padding: 20,
   },
   description: {
     marginBottom: 10,

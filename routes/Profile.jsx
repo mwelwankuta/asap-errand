@@ -36,7 +36,7 @@ export default function Profile() {
             style={[inputStyle, { marginBottom: 10 }]}
             clearTextOnFocus
           />
-          {user.account == 'runner' && (
+          {user.account && user.account.type == 'runner' && (
             <>
               <Text style={styles.label}> Bio</Text>
               <View style={styles.update}>

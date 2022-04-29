@@ -9,20 +9,24 @@ import {
 } from 'react-native';
 import { Button, Stars } from '../../components';
 
-export default function ErrandRunnerCard({ item, navigation }) {
-  const { distance, bio, image, name, rating, recommendations } = item;
-
-  const gotoRunner = () => {
-    navigation.navigate('Runner', { ...item });
-  };
-
+export default function ErrandRunnerCard({
+  distance,
+  bio,
+  image,
+  name,
+  rating,
+  recommendations,
+  navigation,
+}) {
   const height = Dimensions.get('window').height;
 
   return (
     <View style={styles.container}>
       <TouchableOpacity
         activeOpacity={0.8}
-        onPress={gotoRunner}
+        onPress={() => {
+          navigation.navigate('Runner', { ...item });
+        }}
         style={styles.upperContent}>
         <View>
           <Image

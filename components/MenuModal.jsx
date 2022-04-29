@@ -36,7 +36,7 @@ export default function MenuModal() {
     Alert.alert('Logout', 'are you sure you want to logout', [
       {
         title: 'No',
-        style: 'cancel',
+        onPress: () => null
       },
       {
         title: 'Yes',
@@ -109,7 +109,9 @@ export default function MenuModal() {
           </View>
           <View>
             <Text style={styles.name}>{user.name}</Text>
-            <Text style={styles.account}>{user.account}</Text>
+            <Text style={styles.account}>
+              {user.account && user.account.name}
+            </Text>
           </View>
         </TouchableOpacity>
         <ListItem text={'Invite a friend'} onPress={share} />

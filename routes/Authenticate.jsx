@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -21,77 +21,70 @@ export default function Authenticate({ navigation }) {
     name: 'Zambia',
   });
 
-  function handleValidation({ phone }) {
-    const errors = {};
-    if (!phone) errors.phone = 'a phone number is required';
-    return errors;
-  }
-
-  function handleSubmit({ phone, code }) {
-    navigation.navigate('VerifyCode', { phone, code });
-  }
-
   return (
-    <Fragment>
-      <ScrollView style={styles.container}>
-        <SafeAreaView>
-          <Formik
-            onSubmit={handleSubmit}
-            validate={handleValidation}
-            initialValues={{ code: selectedCountry.dial_code, phone: '' }}>
-            {({ values, errors, handleChange, handleBlur, handleSubmit }) => (
-              <View>
-                <Text style={styles.title}>Enter your phone number</Text>
-                <Text style={styles.description}>
-                  enter your phone number and region to register for an account
+    <SafeAreaView style={styles.container}>
+      <Formik
+        validateOnBlur={false}
+        validateOnChange={false}
+        initialValues={{ code: selectedCountry.dial_code, phone: '' }}
+        onSubmit={({ phone, code }) => {
+          navigation.navigate('VerifyCode', { phone, code });
+        }}
+        validate={({ phone }) => {
+          const errors = {};
+          if (!phone) errors.phone = 'a phone number is required';
+          return errors;
+        }}>
+        {({ values, errors, handleChange, handleBlur, handleSubmit }) => (
+          <ScrollView keyboardShouldPersistTaps='handled'>
+            <Text style={styles.title}>Enter your phone number</Text>
+            <Text style={styles.description}>
+              enter your phone number and region to register for an account
+            </Text>
+            <View style={styles.inputHolder}>
+              <TouchableOpacity
+                onPress={() => setShowModal(true)}
+                activeOpacity={0.8}
+                placeholder='Phone number'
+                style={[inputStyle, styles.country]}>
+                <Text style={{ fontFamily: 'Inter-Regular' }}>
+                  {selectedCountry.name} ({selectedCountry.dial_code})
                 </Text>
-                <View style={styles.inputHolder}>
-                  <TouchableOpacity
-                    onPress={() => setShowModal(true)}
-                    activeOpacity={0.8}
-                    placeholder='Phone number'
-                    style={[inputStyle, styles.country]}>
-                    <Text style={{ fontFamily: 'Inter-Regular' }}>
-                      {selectedCountry.name} ({selectedCountry.dial_code})
-                    </Text>
-                    <AntDesign name='caretdown' size={10} color='#555' />
-                  </TouchableOpacity>
-                </View>
-                <View style={styles.inputHolder}>
-                  <TextInput
-                    keyboardType='phone-pad'
-                    onChangeText={handleChange('phone')}
-                    onBlur={handleBlur('phone')}
-                    placeholder='Phone number'
-                    value={values.phone}
-                    style={
-                      errors.phone
-                        ? [inputStyle, { borderColor: 'red' }]
-                        : inputStyle
-                    }
-                    maxLength={10}
-                  />
-                  <Text style={styles.errorText}>
-                    {errors.phone ? errors.phone : ''}
-                  </Text>
-                </View>
-                <Text style={styles.tip}>
-                  By continuing you agree that you are authorized to receive
-                  texts on this number.
-                </Text>
-                <Button title='Send Code' onPress={handleSubmit} />
-              </View>
-            )}
-          </Formik>
-        </SafeAreaView>
-      </ScrollView>
-
+                <AntDesign name='caretdown' size={10} color='#555' />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.inputHolder}>
+              <TextInput
+                keyboardType='phone-pad'
+                onChangeText={handleChange('phone')}
+                onBlur={handleBlur('phone')}
+                placeholder='Phone number'
+                value={values.phone}
+                style={
+                  errors.phone
+                    ? [inputStyle, { borderColor: 'red' }]
+                    : inputStyle
+                }
+                maxLength={10}
+              />
+              <Text style={styles.errorText}>
+                {errors.phone ? errors.phone : ''}
+              </Text>
+            </View>
+            <Text style={styles.tip}>
+              By continuing you agree that you are authorized to receive texts
+              on this number.
+            </Text>
+            <Button title='Send Code' onPress={handleSubmit} />
+          </ScrollView>
+        )}
+      </Formik>
       <CountryModal
         isOpen={showModal}
         closeModal={() => setShowModal(false)}
         setSelectedCountry={setSelectedCountry}
       />
-    </Fragment>
+    </SafeAreaView>
   );
 }
 

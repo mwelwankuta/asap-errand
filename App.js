@@ -8,7 +8,8 @@ import * as NavigationBar from 'expo-navigation-bar';
 
 import UserProvider from './context/user/UserProvider';
 import ModalProvider from './context/modal/ModalProvider';
-import StackSelector from './StackSelector';
+
+import { AuthenticationSwitch } from './screens';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -34,7 +35,7 @@ export default function App() {
       <NavigationContainer>
         <UserProvider>
           <ModalProvider>
-            <StackSelector />
+            <AuthenticationSwitch />
           </ModalProvider>
         </UserProvider>
       </NavigationContainer>

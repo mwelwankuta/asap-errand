@@ -7,7 +7,7 @@ import arrow_back from '../assets/icons/arrow_back.svg';
 
 const AuthStack = createNativeStackNavigator();
 
-export default function AuthScreen() {
+export default function AuthNavigation() {
   return (
     <AuthStack.Navigator
       screenOptions={({ route, navigation }) => ({

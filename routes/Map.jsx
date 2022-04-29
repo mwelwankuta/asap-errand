@@ -1,8 +1,8 @@
 import React, { useLayoutEffect, useState } from 'react';
 import { StyleSheet, View, Dimensions, TouchableOpacity } from 'react-native';
 import { SvgXml as Svg } from 'react-native-svg';
-import * as Location from 'expo-location';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import * as Location from 'expo-location';
 
 import { Button } from '../components';
 

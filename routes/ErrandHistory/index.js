@@ -1,44 +1,14 @@
 import React, { useState, useContext } from 'react';
 import {
-  StyleSheet,
   Alert,
   Text,
   View,
-  Image,
   TouchableOpacity,
   FlatList,
+  StyleSheet,
 } from 'react-native';
-import userContext from '../context/user';
-
-function HistoryItem({ item }) {
-  const { user } = useContext(userContext);
-  const { runner_name, runner_image, hirer_image, description, amount } = item;
-
-  return (
-    <View style={styles.listItem}>
-      <View style={styles.imageHolder}>
-        <Image
-          source={{
-            uri: user.account == 'standard' ? runner_image : hirer_image,
-            height: 50,
-            width: 50,
-          }}
-          style={styles.image}
-        />
-      </View>
-      <View style={styles.detailsHolder}>
-        <Text style={styles.name}>
-          {user.account == 'standard' ? runner_name : hirer_image}
-          {' • '}
-          <Text style={{ fontFamily: 'Inter-SemiBold' }}> {amount} Tokens</Text>
-        </Text>
-        <Text style={styles.description}>
-          {user.account == 'standard' ? description : ''}
-        </Text>
-      </View>
-    </View>
-  );
-}
+import userContext from '../../context/user';
+import HistoryItem from './HistoryItem';
 
 export default function ErrandHistory() {
   const { user } = useContext(userContext);
@@ -46,8 +16,8 @@ export default function ErrandHistory() {
   const [errands, setErrands] = useState([
     {
       id: 1,
-      hirer: 'Mwelwa Nkuta',
-      hirer_image: '',
+      hirer_name: 'Mwelwa Nkuta',
+      hirer_image: 'https://avatars.githubusercontent.com/u/9113740?v=4',
       amount: 14,
       description: 'talk to john about my mouse and come back with it',
       runner_name: 'Peter Books',
@@ -55,8 +25,8 @@ export default function ErrandHistory() {
     },
     {
       id: 2,
-      hirer: 'Mwelwa Nkuta',
-      hirer_image: '',
+      hirer_name: 'Mwelwa Nkuta',
+      hirer_image: 'https://avatars.githubusercontent.com/u/9113740?v=4',
       amount: 10,
       description:
         'go and tell the people building my wall, to build it faster',
@@ -76,16 +46,19 @@ export default function ErrandHistory() {
     );
   };
 
-
   return (
     <FlatList
       data={errands}
       style={styles.container}
       keyExtractor={item => item.id}
+      renderItem={({ item }) => <HistoryItem {...item} />}
       ListHeaderComponent={() => (
         <View style={styles.titleHolder}>
           <Text style={styles.title}>
-            Previous {user.account == 'standard' ? 'errand runners' : 'hirers'}
+            Previous{' '}
+            {user.account && user.account.type == 'standard'
+              ? 'errand runners'
+              : 'hirers'}
           </Text>
           <View>
             <TouchableOpacity
@@ -97,7 +70,6 @@ export default function ErrandHistory() {
           </View>
         </View>
       )}
-      renderItem={({ item }) => <HistoryItem item={item} />}
     />
   );
 }
@@ -119,32 +91,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter-SemiBold',
     fontSize: 16,
     color: '#222',
-  },
-  listItem: {
-    flexDirection: 'row',
-    marginBottom: 10,
-    borderBottomColor: '#ddd',
-    borderBottomWidth: 0.5,
-    paddingVertical: 5,
-  },
-  imageHolder: {
-    marginRight: 5,
-  },
-  image: {
-    borderRadius: 100,
-  },
-  detailsHolder: {
-    flex: 1,
-  },
-  name: {
-    fontFamily: 'Inter-Medium',
-    fontSize: 15,
-    color: '#222',
-  },
-  description: {
-    color: '#333',
-    fontSize: 13,
-    overflow: 'visible',
   },
   clearButton: {
     paddingHorizontal: 4,

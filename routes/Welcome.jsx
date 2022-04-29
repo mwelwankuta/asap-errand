@@ -2,8 +2,6 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { SvgXml as Svg } from 'react-native-svg';
 import { Button } from '../components';
-
-//svg import
 import logo from '../assets/asap_errand.svg';
 
 export default function Welcome({ navigation }) {

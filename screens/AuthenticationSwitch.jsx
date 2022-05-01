@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
-import { AuthNavigation } from './index';
+import RootNavigation from './RootNavigation';
+import AuthNavigation from './AuthNavigation';
 
 import userContext from '../context/user';
-import RootNavigation from './RootNavigation';
 
 export default function AuthenticationSwitch() {
   const { user } = useContext(userContext);

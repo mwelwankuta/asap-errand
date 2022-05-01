@@ -1,24 +1,23 @@
-import React, { useContext, Fragment } from 'react';
-import { TouchableOpacity, Image, StyleSheet, Text } from 'react-native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { ErrandHistory, Messages, Profile } from '../routes';
-import { SvgXml as Svg } from 'react-native-svg';
+import React, { useContext } from "react";
+import { TouchableOpacity, Image, StyleSheet, Text } from "react-native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { ErrandHistory, Messages, Profile } from "../routes";
+import { SvgXml as Svg } from "react-native-svg";
 
-import MenuModal from '../components/MenuModal';
-import HomeScreen from './HomeScreen';
+import HomeScreen from "./HomeScreen";
 
 // asset imports
-import compass from '../assets/icons/compass.svg';
-import compass_active from '../assets/icons/compass_active.svg';
-import messages from '../assets/icons/messages.svg';
-import messages_active from '../assets/icons/messages_active.svg';
-import profile from '../assets/icons/profile.svg';
-import profile_active from '../assets/icons/profile_active.svg';
-import menu from '../assets/icons/menu.svg';
-import menu_active from '../assets/icons/menu_active.svg';
-import logo from '../assets/asap.svg';
-import modalContext from '../context/modal';
-import userContext from '../context/user';
+import compass from "../assets/icons/compass.svg";
+import compass_active from "../assets/icons/compass_active.svg";
+import messages from "../assets/icons/messages.svg";
+import messages_active from "../assets/icons/messages_active.svg";
+import profile from "../assets/icons/profile.svg";
+import profile_active from "../assets/icons/profile_active.svg";
+import menu from "../assets/icons/menu.svg";
+import menu_active from "../assets/icons/menu_active.svg";
+import logo from "../assets/asap.svg";
+import modalContext from "../context/modal";
+import userContext from "../context/user";
 
 const Tab = createBottomTabNavigator();
 
@@ -29,21 +28,22 @@ export default function RootNavigation() {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        headerTitleAlign: 'center',
+        headerTitleAlign: "center",
         headerBackVisible: false,
         headerLeft: () => (
           <Svg xml={logo} height={52} width={56} style={{ marginLeft: 16 }} />
         ),
         headerTitle: () => (
           <Text style={styles.title}>
-            {route.params ? route.params.title : ''}
+            {route.params ? route.params.title : ""}
           </Text>
         ),
         headerRight: () => (
           <TouchableOpacity
             onPress={() => setModalVisible(true)}
             style={{ marginRight: 15.4 }}
-            activeOpacity={0.8}>
+            activeOpacity={0.8}
+          >
             <Image
               style={styles.userAvatar}
               source={{
@@ -57,18 +57,19 @@ export default function RootNavigation() {
         tabBarHideOnKeyboard: true,
         tabBarShowLabel: false,
         tabBarStyle: {
-          borderTopColor: '#ddd',
+          borderTopColor: "#ddd",
           borderTopWidth: 0.6,
-          shadowColor: 'transparent',
+          shadowColor: "transparent",
           shadowOpacity: 0,
         },
         tabBarIconStyle: {
           height: 20,
           width: 20,
         },
-      })}>
+      })}
+    >
       <Tab.Screen
-        name='Home'
+        name="Home"
         component={HomeScreen}
         options={() => ({
           headerShown: false,
@@ -82,7 +83,7 @@ export default function RootNavigation() {
         })}
       />
       <Tab.Screen
-        name='Messages'
+        name="Messages"
         component={Messages}
         options={{
           tabBarIcon: ({ focused, size }) => (
@@ -95,7 +96,7 @@ export default function RootNavigation() {
         }}
       />
       <Tab.Screen
-        name='Profile'
+        name="Profile"
         component={Profile}
         options={{
           tabBarIcon: ({ focused, size }) => (
@@ -108,7 +109,7 @@ export default function RootNavigation() {
         }}
       />
       <Tab.Screen
-        name='Menu'
+        name="Menu"
         component={ErrandHistory}
         options={{
           tabBarIcon: ({ focused, size }) => (
@@ -129,13 +130,13 @@ const styles = StyleSheet.create({
     height: 35,
     width: 35,
     borderRadius: 100,
-    borderColor: '#ddd',
+    borderColor: "#ddd",
     borderWidth: 1,
-    resizeMode: 'cover',
+    resizeMode: "cover",
     marginRight: 10,
   },
   title: {
-    fontFamily: 'Inter-SemiBold',
+    fontFamily: "Inter-SemiBold",
     fontSize: 15,
   },
 });

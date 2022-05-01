@@ -1,13 +1,7 @@
-import React from 'react';
-import {
-  Dimensions,
-  TouchableOpacity,
-  View,
-  Text,
-  Image,
-  StyleSheet,
-} from 'react-native';
-import { Button, Stars } from '../../components';
+import React from "react";
+import { TouchableOpacity, View, Text, Image, StyleSheet } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { Button, Stars } from "../../components";
 
 export default function ErrandRunnerCard({
   distance,
@@ -16,18 +10,25 @@ export default function ErrandRunnerCard({
   name,
   rating,
   recommendations,
-  navigation,
 }) {
-  const height = Dimensions.get('window').height;
+  const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
       <TouchableOpacity
         activeOpacity={0.8}
         onPress={() => {
-          navigation.navigate('Runner', { ...item });
+          navigation.navigate("Runner", {
+            distance,
+            bio,
+            image,
+            name,
+            rating,
+            recommendations,
+          });
         }}
-        style={styles.upperContent}>
+        style={styles.upperContent}
+      >
         <View>
           <Image
             source={{ uri: image, width: 40, height: 40 }}
@@ -38,7 +39,7 @@ export default function ErrandRunnerCard({
           <View>
             <Text style={styles.name}>
               {name}
-              {' • '}
+              {" • "}
               {distance}
             </Text>
           </View>
@@ -48,13 +49,13 @@ export default function ErrandRunnerCard({
         </View>
       </TouchableOpacity>
       <Image
-        resizeMethod='resize'
-        resizeMode='cover'
+        resizeMethod="resize"
+        resizeMode="cover"
         source={{
           uri: image,
-          height: parseFloat(`${(1280 / height) * 100}`),
-          width: '100%',
-          cache: 'reload',
+          height: undefined,
+          width: "100%",
+          cache: "reload",
         }}
         style={styles.errandImage}
       />
@@ -65,7 +66,7 @@ export default function ErrandRunnerCard({
         <View style={{ marginBottom: 5 }}>
           <Button
             onPress={() =>
-              navigation.navigate('Request', {
+              navigation.navigate("Request", {
                 title: name,
                 name,
                 rating,
@@ -76,12 +77,12 @@ export default function ErrandRunnerCard({
               })
             }
             loading={false}
-            title='Request'
+            title="Request"
           />
         </View>
         <Text style={styles.recommendations}>
-          {recommendations}{' '}
-          {recommendations == 1 ? 'recommendation' : 'recommendations'}
+          {recommendations}{" "}
+          {recommendations == 1 ? "recommendation" : "recommendations"}
         </Text>
       </View>
     </View>
@@ -90,31 +91,32 @@ export default function ErrandRunnerCard({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderBottomWidth: 0.5,
-    borderBottomColor: '#ddd',
+    borderBottomColor: "#ddd",
     marginTop: 10,
   },
   name: {
-    fontFamily: 'Inter-Medium',
-    color: '#222',
+    fontFamily: "Inter-Medium",
+    color: "#222",
     fontSize: 16,
   },
   ratingHolder: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   upperContent: {
     paddingHorizontal: 15,
     padding: 5,
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   contentHolder: {
     padding: 15,
   },
   errandImage: {
-    backgroundColor: '#000',
-    height: parseFloat(`${(1280 / Dimensions.get('window').height) * 100}`),
-    width: '100%',
+    backgroundColor: "#000",
+    height: undefined,
+    width: "100%",
+    aspectRatio: 2 / 1,
   },
   errandAvatar: {
     marginRight: 10,
@@ -122,15 +124,15 @@ const styles = StyleSheet.create({
   },
   text: {
     marginBottom: 10,
-    color: '#222',
+    color: "#222",
   },
   recommendations: {
-    color: '#888',
-    fontFamily: 'Inter-Regular',
+    color: "#888",
+    fontFamily: "Inter-Regular",
     fontSize: 13,
   },
   bio: {
-    fontFamily: 'Inter-Regular',
-    color: '#222',
+    fontFamily: "Inter-Regular",
+    color: "#222",
   },
 });

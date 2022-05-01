@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext } from "react";
 import {
   View,
   Text,
@@ -8,20 +8,22 @@ import {
   StyleSheet,
   TouchableOpacity,
   Share,
-} from 'react-native';
-import ReactModal from 'react-native-modalbox';
+  Switch,
+} from "react-native";
+import ReactModal from "react-native-modalbox";
 
-import Button from './Button';
-import modalContext from '../context/modal';
-import userContext from '../context/user';
+import Button from "./Button";
+import modalContext from "../context/modal";
+import userContext from "../context/user";
 
-import { developerEmail } from '../constants';
-import { useNavigation } from '@react-navigation/native';
+import { colors, developerEmail } from "../constants";
+import { useNavigation } from "@react-navigation/native";
+import themeContext from "../context/theme";
 
-function ListItem({ text, onPress }) {
+function ListItem({ children, onPress }) {
   return (
     <TouchableOpacity style={styles.listItem} onPress={onPress}>
-      <Text>{text}</Text>
+      {children}
     </TouchableOpacity>
   );
 }
@@ -29,18 +31,26 @@ function ListItem({ text, onPress }) {
 export default function MenuModal() {
   const navigation = useNavigation();
   const { modalVisible, setModalVisible } = useContext(modalContext);
-
   const { setUser, user } = useContext(userContext);
+  const { theme, setTheme } = useContext(themeContext);
+
+  const changeTheme = () => {
+    if (theme == "light") {
+      setTheme("dark");
+    } else {
+      setTheme("light");
+    }
+  };
 
   const logout = () => {
-    Alert.alert('Logout', 'are you sure you want to logout', [
+    Alert.alert("Logout", "are you sure you want to logout", [
       {
-        title: 'No',
-        onPress: () => null
+        title: "No",
+        onPress: () => null,
       },
       {
-        title: 'Yes',
-        style: 'destructive',
+        title: "Yes",
+        style: "destructive",
         onPress: () => setUser(null),
       },
     ]);
@@ -50,14 +60,14 @@ export default function MenuModal() {
     setModalVisible(false);
     Share.share(
       {
-        title: 'Invite a friend',
+        title: "Invite a friend",
         message:
-          'Download the app and be able to find someone to ran your errands within minutes. https://play.google.com/store/apps/details?id=com.asaperrand.app',
-        url: 'https://play.google.com/store/apps/details?id=com.asaperrand.app',
+          "Download the app and be able to find someone to ran your errands within minutes. https://play.google.com/store/apps/details?id=com.asaperrand.app",
+        url: "https://play.google.com/store/apps/details?id=com.asaperrand.app",
       },
       {
-        dialogTitle: 'Invite a friend',
-        excludedActivityTypes: ['com.apple.UIKit.activity.SaveToCameraRoll'],
+        dialogTitle: "Invite a friend",
+        excludedActivityTypes: ["com.apple.UIKit.activity.SaveToCameraRoll"],
       }
     );
   };
@@ -71,7 +81,7 @@ export default function MenuModal() {
 
   const profile = () => {
     setModalVisible(false);
-    navigation.navigate('Profile');
+    navigation.navigate("Profile");
   };
 
   return (
@@ -80,27 +90,30 @@ export default function MenuModal() {
       backButtonClose
       backdropPressToClose
       swipeThreshold={50}
-      style={styles.container}
       backdropOpacity={0.2}
-      position='top'
+      position="top"
       isOpen={modalVisible}
-      onClosed={() => setModalVisible(false)}>
+      style={styles.container}
+      onClosed={() => setModalVisible(false)}
+    >
       <View style={{ flex: 1 }}>
         <View
           style={{
             height: 5,
             width: 100,
             borderRadius: 100,
-            backgroundColor: '#ddd',
+            backgroundColor: "#ddd",
             padding: 2,
-            alignSelf: 'center',
+            alignSelf: "center",
             marginTop: 6,
-          }}></View>
+          }}
+        ></View>
         <Text style={styles.title}>Menu</Text>
         <TouchableOpacity
           onPress={profile}
           activeOpacity={0.8}
-          style={[styles.listItem, styles.user]}>
+          style={[styles.listItem, styles.user]}
+        >
           <View>
             <Image
               source={{ uri: user.image, height: 70, width: 70 }}
@@ -114,10 +127,23 @@ export default function MenuModal() {
             </Text>
           </View>
         </TouchableOpacity>
-        <ListItem text={'Invite a friend'} onPress={share} />
-        <ListItem text={'Give Feedback'} onPress={feedback} />
+        <ListItem children={<Text>Invite a friend</Text>} onPress={share} />
+        <ListItem children={<Text>Give Feedback</Text>} onPress={feedback} />
+        <ListItem onPress={feedback}>
+          <View style={styles.themeChange}>
+            <Text>Dark Mode</Text>
+            <View>
+              <Switch
+                thumbColor={colors.blue}
+                trackColor={colors.blue}
+                value={theme == "light"}
+                onChange={changeTheme}
+              />
+            </View>
+          </View>
+        </ListItem>
         <View style={{ height: 40 }}>
-          <Button alternative title='Logout' onPress={logout} />
+          <Button alternative title="Logout" onPress={logout} />
         </View>
       </View>
     </ReactModal>
@@ -128,38 +154,43 @@ const styles = StyleSheet.create({
   container: {
     paddingVertical: 10,
     paddingHorizontal: 20,
-    marginTop: 'auto',
-    height: '60%',
+    marginTop: "auto",
+    height: "65%",
     borderTopRightRadius: 10,
     borderTopLeftRadius: 10,
   },
   title: {
-    fontFamily: 'Inter-SemiBold',
+    fontFamily: "Inter-SemiBold",
     fontSize: 16,
     marginBottom: 10,
   },
   listItem: {
-    borderBottomColor: '#ddd',
+    borderBottomColor: "#ddd",
     borderBottomWidth: 0.5,
     marginBottom: 10,
     paddingVertical: 10,
   },
   user: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   image: {
     borderRadius: 100,
     marginRight: 10,
   },
   name: {
-    fontFamily: 'Inter-Medium',
+    fontFamily: "Inter-Medium",
     fontSize: 16,
-    color: '#222',
+    color: "#222",
   },
   account: {
-    fontFamily: 'Inter-Regular',
+    fontFamily: "Inter-Regular",
     fontSize: 13,
-    color: '#333',
+    color: "#333",
+  },
+  themeChange: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
 });

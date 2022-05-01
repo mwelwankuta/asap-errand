@@ -1,5 +1,5 @@
-import React from 'react';
-import { Formik } from 'formik';
+import React from "react";
+import { Formik } from "formik";
 import {
   StyleSheet,
   Text,
@@ -7,24 +7,28 @@ import {
   View,
   ScrollView,
   TouchableOpacity,
-} from 'react-native';
-import { Button } from '../components';
-import { inputStyle } from '../constants';
+} from "react-native";
+import { Button } from "../components";
+import { inputStyle } from "../constants";
 
 export default function VerifyCode({ route, navigation }) {
   const { phone, code } = route.params;
   return (
     <ScrollView style={styles.container}>
       <Formik
+        validateOnChange={false}
+        validateOnBlur={false}
         validate={({ code }) => {
           const errors = {};
-          if (!code) errors.code = 'a code is needed to continue';
+          if (!code) errors.code = "a code is needed to continue";
+          else if (code.length < 4) errors.code = "invalid verification code";
           return errors;
         }}
         onSubmit={() => {
-          navigation.navigate('LoginDetails');
+          navigation.navigate("LoginDetails");
         }}
-        initialValues={{ code: '' }}>
+        initialValues={{ code: "" }}
+      >
         {({
           values,
           errors,
@@ -40,29 +44,30 @@ export default function VerifyCode({ route, navigation }) {
             </Text>
             <View style={styles.inputHolder}>
               <TextInput
-                keyboardType='phone-pad'
-                textContentType='oneTimeCode'
-                autoComplete='sms-otp'
+                keyboardType="phone-pad"
+                textContentType="oneTimeCode"
+                autoComplete="sms-otp"
+                placeholder="Code"
                 maxLength={4}
-                placeholder='Code'
+                autoFocus
+                onChangeText={handleChange("code")}
+                onBlur={handleBlur("code")}
+                value={values.code}
                 style={
                   errors.code
-                    ? [inputStyle, { borderColor: 'red' }]
+                    ? [inputStyle, { borderColor: "red" }]
                     : inputStyle
                 }
-                onChangeText={handleChange('code')}
-                onBlur={handleBlur('code')}
-                value={values.code}
               />
               <Text style={styles.errorText}>
-                {touched.code ? errors.code : ''}
+                {touched.code ? errors.code : ""}
               </Text>
               <TouchableOpacity style={styles.resend}>
                 <Text>Didn't receive a code? </Text>
                 <Text style={styles.resendText}>Resend Code</Text>
               </TouchableOpacity>
             </View>
-            <Button title='Verify Code' onPress={handleSubmit} />
+            <Button title="Verify Code" onPress={handleSubmit} />
           </View>
         )}
       </Formik>
@@ -73,34 +78,34 @@ export default function VerifyCode({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     paddingHorizontal: 20,
     paddingBottom: 10,
     paddingTop: 20,
   },
   description: {
     marginBottom: 10,
-    fontFamily: 'Inter-Regular',
-    color: '#555',
+    fontFamily: "Inter-Regular",
+    color: "#555",
   },
   title: {
     fontSize: 20,
-    fontFamily: 'Inter-SemiBold',
-    color: '#222',
+    fontFamily: "Inter-SemiBold",
+    color: "#222",
   },
   formHolder: {
     marginTop: 20,
   },
   tip: {
-    fontFamily: 'Inter-Regular',
-    textAlign: 'center',
+    fontFamily: "Inter-Regular",
+    textAlign: "center",
     fontSize: 12,
     marginBottom: 10,
-    color: '#555',
+    color: "#555",
   },
   inputLabel: {
     fontSize: 13,
-    fontFamily: 'Inter-Regular',
+    fontFamily: "Inter-Regular",
     marginBottom: 10,
     marginTop: 15,
   },
@@ -108,21 +113,21 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   country: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   errorText: {
-    fontFamily: 'Inter-Regular',
+    fontFamily: "Inter-Regular",
     fontSize: 13,
-    color: 'red',
+    color: "red",
   },
   resend: {
-    flexDirection: 'row',
+    flexDirection: "row",
     margin: 2,
   },
   resendText: {
-    color: '#1681FF',
+    color: "#1681FF",
     marginLeft: 4,
   },
 });

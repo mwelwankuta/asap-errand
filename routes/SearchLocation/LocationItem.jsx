@@ -1,11 +1,8 @@
-import React from 'react';
-import {
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { MaterialIcons } from '@expo/vector-icons';
+import React from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { MaterialIcons } from "@expo/vector-icons";
+import { colors } from "../../constants";
 
 export default function LocationItem({ name, location, coordinates }) {
   const navigation = useNavigation();
@@ -16,10 +13,10 @@ export default function LocationItem({ name, location, coordinates }) {
   const pickLocation = () => {
     const position = `${latitude}, ${longitude}`;
 
-    navigation.navigate('Request', {
+    navigation.navigate("Request", {
       ...route.params,
       [route.params.title_key]: position,
-      title: route.params.name
+      title: route.params.name,
     });
   };
 
@@ -27,10 +24,11 @@ export default function LocationItem({ name, location, coordinates }) {
     <TouchableOpacity
       onPress={pickLocation}
       style={styles.locationItem}
-      activeOpacity={0.8}>
+      activeOpacity={0.8}
+    >
       <View style={styles.locationDetails}>
         <View>
-          <MaterialIcons name='location-pin' color='#222' size={24} />
+          <MaterialIcons name="location-pin" color="#222" size={24} />
         </View>
         <View style={styles.textHolder}>
           <Text style={styles.name}>{name}</Text>
@@ -38,8 +36,39 @@ export default function LocationItem({ name, location, coordinates }) {
         </View>
       </View>
       <View style={styles.locationArrow}>
-        <MaterialIcons name='arrow-back' size={24} color='#222' />
+        <MaterialIcons name="arrow-back" size={24} color="#222" />
       </View>
     </TouchableOpacity>
   );
 }
+
+const styles = StyleSheet.create({
+  locationItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  locationDetails: {
+    flexDirection: "row",
+  },
+  textHolder: {
+    marginLeft: 10,
+  },
+  name: {
+    fontFamily: "Inter-Medium",
+    fontSize: 16,
+    color: colors.darkerGrey,
+  },
+  location: {
+    fontFamily: "Inter-Regular",
+    fontSize: 13,
+    color: colors.darkGrey,
+  },
+  locationArrow: {
+    transform: [
+      {
+        rotateZ: "45deg",
+      },
+    ],
+  },
+});

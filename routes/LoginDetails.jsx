@@ -1,4 +1,4 @@
-import React, { useState, useContext, Fragment } from 'react';
+import React, { useState, useContext, Fragment } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,20 +6,20 @@ import {
   View,
   ScrollView,
   TouchableOpacity,
-} from 'react-native';
-import { Formik } from 'formik';
-import { AntDesign } from '@expo/vector-icons';
+} from "react-native";
+import { Formik } from "formik";
+import { AntDesign } from "@expo/vector-icons";
 
-import { AccountTypeModal, Button } from '../components';
+import { AccountTypeModal, Button } from "../components";
 
-import { inputStyle } from '../constants';
-import userContext from '../context/user';
+import { inputStyle } from "../constants";
+import userContext from "../context/user";
 
 export default function LoginDetails() {
   const [showModal, setShowModal] = useState(false);
   const [selectedAccount, setSelectedAccount] = useState({
-    name: 'Standard',
-    account: 'standard',
+    name: "Standard",
+    account: "standard",
   });
 
   const { setUser } = useContext(userContext);
@@ -30,26 +30,28 @@ export default function LoginDetails() {
           <Formik
             validateOnBlur={false}
             validateOnChange={false}
-            initialValues={{ name: '', account: selectedAccount }}
+            initialValues={{ name: "", account: selectedAccount }}
             onSubmit={() => {
               setUser({
                 id: 123,
-                name: 'Mwelwa Nkuta',
-                image: 'https://avatars.githubusercontent.com/u/64831126?v=4',
+                name: "Mwelwa Nkuta",
+                image: "https://avatars.githubusercontent.com/u/64831126?v=4",
                 errand_in_progress: false,
                 account: selectedAccount,
                 errand: {
-                  name: 'Lee Robinson',
-                  image: 'https://avatars.githubusercontent.com/u/9113740?v=4',
-                  chat: '092',
+                  name: "Lee Robinson",
+                  image: "https://avatars.githubusercontent.com/u/9113740?v=4",
+                  chat: "092",
                 },
               });
             }}
             validate={({ name }) => {
               const errors = {};
-              if (!name) errors.name = 'a name is required';
+              if (!name) errors.name = "a name is required";
+              // TODO: Add regex to verify full name
               return errors;
-            }}>
+            }}
+          >
             {({ values, errors, handleChange, handleBlur, handleSubmit }) => (
               <View>
                 <Text style={styles.title}>About you</Text>
@@ -59,32 +61,33 @@ export default function LoginDetails() {
 
                 <View style={styles.inputHolder}>
                   <TextInput
-                    keyboardType='default'
-                    autoCapitalize='words'
-                    onChangeText={handleChange('name')}
-                    onBlur={handleBlur('name')}
-                    placeholder='Full Name'
+                    keyboardType="default"
+                    autoCapitalize="words"
+                    onChangeText={handleChange("name")}
+                    onBlur={handleBlur("name")}
+                    placeholder="Full Name"
                     value={values.name}
                     style={
                       errors.name
-                        ? [inputStyle, { borderColor: 'red' }]
+                        ? [inputStyle, { borderColor: "red" }]
                         : inputStyle
                     }
                   />
                   <Text style={styles.errorText}>
-                    {errors.name ? errors.name : ''}
+                    {errors.name ? errors.name : ""}
                   </Text>
                 </View>
                 <View style={styles.inputHolder}>
                   <TouchableOpacity
                     onPress={() => setShowModal(true)}
                     activeOpacity={0.8}
-                    placeholder='Account Type'
-                    style={[inputStyle, styles.country]}>
-                    <Text style={{ fontFamily: 'Inter-Regular' }}>
+                    placeholder="Account Type"
+                    style={[inputStyle, styles.country]}
+                  >
+                    <Text style={{ fontFamily: "Inter-Regular" }}>
                       {selectedAccount.name}
                     </Text>
-                    <AntDesign name='caretdown' size={10} color='#555' />
+                    <AntDesign name="caretdown" size={10} color="#555" />
                   </TouchableOpacity>
                 </View>
 
@@ -92,7 +95,7 @@ export default function LoginDetails() {
                   By creating an account you agree to the terms and conditions
                   of <Text style={styles.company}>asap errand</Text>
                 </Text>
-                <Button title='Create Account' onPress={handleSubmit} />
+                <Button title="Create Account" onPress={handleSubmit} />
               </View>
             )}
           </Formik>
@@ -111,7 +114,7 @@ export default function LoginDetails() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: "white",
   },
   contentHolder: {
     flex: 1,
@@ -119,43 +122,43 @@ const styles = StyleSheet.create({
   },
   description: {
     marginBottom: 10,
-    fontFamily: 'Inter-Regular',
-    color: '#555',
+    fontFamily: "Inter-Regular",
+    color: "#555",
   },
   title: {
     fontSize: 20,
-    fontFamily: 'Inter-SemiBold',
-    color: '#222',
+    fontFamily: "Inter-SemiBold",
+    color: "#222",
   },
   formHolder: {
     marginTop: 20,
   },
   tip: {
-    fontFamily: 'Inter-Regular',
-    textAlign: 'center',
+    fontFamily: "Inter-Regular",
+    textAlign: "center",
     fontSize: 12,
     marginVertical: 10,
-    color: '#555',
+    color: "#555",
   },
   inputLabel: {
     fontSize: 13,
-    fontFamily: 'Inter-Regular',
+    fontFamily: "Inter-Regular",
     marginBottom: 10,
     marginTop: 15,
   },
   country: {
-    flexDirection: 'row',
+    flexDirection: "row",
     height: 50,
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   errorText: {
-    color: 'red',
-    fontFamily: 'Inter-Regular',
+    color: "red",
+    fontFamily: "Inter-Regular",
     fontSize: 13,
   },
   company: {
-    fontFamily: 'Billabong',
+    fontFamily: "Billabong",
     fontSize: 20,
   },
 });
